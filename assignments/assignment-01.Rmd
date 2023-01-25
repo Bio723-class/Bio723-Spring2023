@@ -1,0 +1,154 @@
+---
+title: "Bio 723, Assignment 01"
+author: "Your Name and NetID here!"
+output:
+  html_document:
+    highlight: default
+    theme: readable
+    fig_caption: true
+    toc: yes
+    toc_depth: 4
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, prompt = FALSE, eval = FALSE, 
+                      warning = TRUE, comment=NA, cache = FALSE,
+                      fig.width = 6, fig.height = 4)
+```
+
+
+# Instructions
+
+Create a R Markdown document and answer the questions below using code blocks that generate the correct outputs. Feel free to also use explanatory text in your markdown document, however **each of your solutions should show how to generate the answer using R code**. 
+
+Make sure your R Markdown is nicely formatted -- use headers, bullets, numbering, etc so that the structure of the document is clear.
+
+Make sure to "knit" you document before submission to confirm that all code blocks and formatting is as you expect.
+
+When completed, title your R Markdown file as follows:
+
+- `netid-assignment_01-Spring2023.Rmd`
+
+Submit both your Markdown file and the generated HTML document via the Assignments submission section on Sakai.
+
+
+
+# 1. Numeric data
+
+ a. What is the type of the numeric value `2`? [0.25 pt]
+
+ a. What is the type of the numeric value `2L`? [0.25 pt]
+
+ a. What is the value of $1/0$? What is its type? [0.25 pt]
+
+ a. What is the value of $0/0$? What is its type? [0.25 pt]
+
+ a. What is the output of `sqrt(-1)` ($\sqrt{-1}$)?  What is its type?  [0.25 pt]
+ 
+ a. What is the value of `sqrt(-1 + 0i)`? What is its type?  Why does this differ from the previous result? [0.25 pt]
+
+# 2. Character data 
+
+a. Evaluate the following code. Does it give the output you expect? Why or why not? Can you identify a function that returns the number of characters in a string? [1 pt]
+ 
+    ```{r}
+    x <- "Hello, World!"
+    length(x)
+    ```
+
+a. `paste` and `stringr::str_c` both join strings, but given the same inputs they produce different outputs.  Modify the call to `str_c` below to make the outputs identical. [1 pt]
+  
+    ```{r}
+    x <- "hello"
+    y <- "world"
+    paste(x, y)
+    str_c(x, y)
+    ```
+
+a. What does the function `stringr::str_to_lower` do?  Give a code block illustrating the use of this function. [1 pt]
+  
+a. What does the function `stringr::str_split` do? Give a code block illustrating the use of this function? [1 pt]
+  
+
+# 3. Vectors
+
+a. `letters` is a pre-defined vector of characters giving the lowercase letters of the English alphabet.
+ 
+    ```{r}
+    letters
+    ```
+ 
+    Write a code block that combines indexing of `letters` with the `seq` function to retrieve every 3rd letter of the alphabet.  Your output should look like this [2 pts]:
+ 
+      ```
+      [1] "a" "d" "g" "j" "m" "p" "s" "v" "y"
+      ```
+    
+a. This is a multi-part problem:
+    - Create a vector, $x$, with all the even numbers between 2 and 100, inclusive. Do **NOT** generate this by hand! [1 pt]  
+    - Show how to use vector indexing to extract all the numbers from $x$ that are evenly divisible by 3 (HINT: the modulo operator, `%%`, will be useful for this [1 pt]
+    - Show how to replace all the elements of $x$ that are greater than 20 and less than 80 with the value -99. [1 pt]
+
+a. The following two vectors give names of countries and gross domestic product (GDP) for each of those countries (expressed in USD):
+    ```{r}
+    countries <- c("Benin", "Nepal", "United Arab Emirates", 
+      "United States", "Solomon Islands", "Ireland", "Qatar", 
+      "Macau", "Singapore", "Norway", "Luxembourg", "Brunei", 
+      "Switzerland", "Hong Kong", "Senegal", "Yemen")
+    
+    gdp <- c(2168, 2468, 72419, 57467, 2236, 68883, 
+      127523, 104169, 87856, 59302, 105882, 77441, 
+      62882, 58553, 2568, 2508)
+    ```
+   
+    - Write a code block showing how you could find all the countries with a per capita GDP greater than $70,000. [1 pt]
+  
+    - Write a code block showing how to show sort the `gdp` vector in descending order (i.e. from largest to smallest) [1 pt]
+  
+    - Write a code block showing how to  sort the `countries` vector from with respect to GDP, with the countries with the largest GDPs listed first. [2 pts]    
+  
+   
+ 
+# 4. Lists
+
+
+Here's code that shows how we could use lists to make a simple phone book.
+
+```{r}
+john <- list(fname = "John", lname = "Smithee", age = 24,
+             phone = "919-555-1234")
+jane <- list(fname = "Jane", lname = "Doe", age = 39,
+             phone = "919-555-4321")
+jack <- list(fname = "Jack", lname = "Indabox", age = 13,
+             phone = NA)
+jill <- list(fname = "Jill", lname = "Bopeep", age = 18,
+             phone = "919-555-1243")
+
+phone.book <- list(john, jane, jack, jill)
+```
+
+ a. Write a code block illustrating how you could use list indexing to get back the first and last name of the first person in the phone book.  The returned object should be a list. [1 pt]
+
+ a. Write a code block illustrating how you could use list indexing to look up the age of the fourth person in the phone book. The returned object should be a number. [1 pt]
+ 
+ a. Write a code block illustrating how you could add a person to the `phone.book` list object. [1 pt]
+ 
+ 
+# 5. Data frames
+
+Here's an examplar data frame
+
+```{r}
+age <- c(30, 26, 21, 29, 25, 22, 28, 24, 23, 20)
+sex <- rep(c("M","F"), 5)
+wt.in.kg <- c(88, 76, 67, 66, 56, 74, 71, 60, 52, 72)
+
+df <- data.frame(age = age, sex = sex, wt = wt.in.kg)
+```
+
+ a. Write a code block illustrating how to add a new column, "wt.in.lbs", giving the weight in US pounds (1 kg = 2.2 lbs) for every individual in `df` [1 pt]
+
+ a. Write a code block showing how to use indexing to extract only the female individuals from `df` [1 pt]
+ 
+
+ a. Write a code block showing how to create a new data frame that includes only the odd numbered rows (i.e. rows 1, 3, 5, ...) and just the age and sex columns from `df` [1 pt]

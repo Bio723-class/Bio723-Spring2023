@@ -134,6 +134,7 @@ typeof(x)
 ```{r}
 x <- as.integer(10)
 typeof(x)
+x <- 10L # alternate syntax for creating an integer value
 ```
 
 - Complex numbers -- numbers with a real and "imaginary" part. We won't be explicitly using complex numbers in this course, but they sometimes appear unexpectedly in some calculations.
@@ -369,7 +370,54 @@ sqrt(x)
 x < y
 ```
 
-## Vector recycling
+
+
+## Lists
+
+Lists in R are like vectors but the elements of a list are arbitrary objects (even other lists). Lists are "heteregeneous".
+
+```{r}
+x <- list('Bob',27, 10, c(720,710))
+typeof(x)
+x
+```
+
+## Indexing Lists
+
+Items in lists are accessed in a  different manner than vectors.
+
+- Typically you use double brackets (`[[]]`)to return the element at index `i`
+
+- Single brackets always return a list containing the element at index `i`
+
+
+```{r}
+x <- list('Bob', 27, 10, c(720,710))
+x[1]
+typeof(x[1])
+x[[1]]
+typeof(x[[1]])
+```
+
+## List elements can have names
+
+```{r, size="small"}
+x <- list(name='Bob',age=27, years.in.school=10)
+x
+```
+
+Named list objects can be accessed via the `$` operator
+
+```{r, size="small"}
+x$years.in.school
+```
+
+The names of list elements can be accessed with the `names()` function
+
+```{r, size="small"}
+names(x)
+```
+
 
 
 
@@ -396,6 +444,13 @@ example.df
 
 
 ## Data frames: shape and column indexing
+
+Column names
+
+```{r}
+names(examples.df)
+```
+
 
 Shape 
 
