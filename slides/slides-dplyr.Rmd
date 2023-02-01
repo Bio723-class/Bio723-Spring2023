@@ -1,154 +1,29 @@
 ---
-title: "Introduction to dplyr"
+title: "Introduction to R pipes and dplyr"
 author: "Paul M. Magwene"
 output: beamer_presentation
 fontsize: "9pt"    
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE, warning=FALSE, message=FALSE, comment = "", collapse=TRUE)
-options(width=60)
+
+knitr::opts_chunk$set(echo = TRUE, 
+                      warning=FALSE, 
+                      message=FALSE, 
+                      comment = "", 
+                      collapse = TRUE)
+options(width=70)
 ```
 
-```{r}
+```{r, echo = FALSE}
 library(tidyverse)
+#library(palmerpenguins)
 ```
 
 
-## What is `dplyr`?
+## The magrittr pipe operator
 
-`dplyr` is a package that provides a "grammar for data manipulation"
-
-\bigskip
-
-Key "verbs" in the `dplyr` package:
-
-  * `select()`
-  * `filter()`
-  * `mutate()`
-  * `arrange()`
-  * `summarize()`
-  * `group_by()`
-  
-\bigskip
-
-All these functions return new data frames instead of modifying existing data frames
-
-
-
-
-## `select()` subsets columns
-
-```{r, echo=TRUE}
-names(iris)
-```
-
-\medskip
-
-```{r, echo = TRUE}
-# select two columns
-df <- select(iris, Sepal.Length, Petal.Length)
-head(df, 3)
-```
-
-\medskip
-
-```{r, echo = TRUE}
-# select everything BUT the species column
-df <- select(iris, -Species)
-head(df, 3)
-```
-
-## `select()` has some specialized functions for powerful filtering
-
-```{r, echo = TRUE}
-df <- select(iris, starts_with("Petal")) 
-head(df, 3)
-```
-
-\medskip
-
-```{r, echo = TRUE}
-df <- select(iris, ends_with("Length")) 
-head(df, 3)
-```
-
-
-
-## `filter()` selects rows that match criteria
-
-```{r, echo = TRUE}
-# get only the I. setosa specimens
-df <- filter(iris, Species == "setosa") 
-head(df, 3)
-```
-
-\medskip
-
-```{r, echo=TRUE}
-# filter on mulitple criteria 
-df <- filter(iris, Species == "setosa", Sepal.Length < 5)
-head(df, 3)
-```
-
-
-## `mutate()` adds or transforms columns
-
-```{r, echo=TRUE}
-df <- mutate(iris, Species = str_to_upper(Species))
-head(df, 3)
-```
-
-## `arrange()` sorts rows according to values of one or more columns
-
-```{r, echo=TRUE}
-# sort by Sepal.Length
-df <- arrange(iris, Sepal.Length)
-head(df, 3)
-```
-
-\medskip
-
-```{r, echo=TRUE}
-# sort by Sepal.Length then by Petal.Length
-df <- arrange(iris, Sepal.Length, Petal.Length)
-head(df, 3)
-```
-
-## `summarize()` transforms and collapses
-
-`summarize()` applies functions to one or more variables (columns) in the data frame, reducing a vector of values to a single value and returning the results in a data frame
-
-\bigskip
-
-```{r, echo=TRUE}
-mean.Lengths <- 
-  summarize(iris, 
-            avg.Sepal.Length = mean(Sepal.Length), 
-            avg.Petal.Length = mean(Petal.Length))
-
-mean.Lengths
-```
-
-## `group_by()` is used for conditioning (faceting) and transforming
-
-```{r, echo=TRUE}
-# apply grouping
-grouped.df <- group_by(iris, Species)
-
-# summarize grouped data frame
-mean.by.group <- 
-  summarize(grouped.df,
-            avg.Sepal.Length = mean(Sepal.Length), 
-            avg.Petal.Length = mean(Petal.Length))          
-          
-mean.by.group
-```
-
-
-## The pipe operator, `%>%`
-
-`dplyr` also provides a new operator called a pipe
+An R package called `magrittr` popularized a new operator called a pipe (Note: pipes are an older computing concept dating back to the origins of the Unix operating)
 
   - The pipe operator is `%>%`
 
@@ -202,18 +77,304 @@ The pipe operator helps to make our intent clearer, as compared to nested functi
 str_flatten(tail(str_to_upper(letters), 10), "-")
 ```
 
-## The `dplyr` verbs functions are designed to work well with piping!
+## The "built-in" pipe operator (R 4.1+)
 
+The magrittr pipe operator became popular enough that the R developers added a native pipe operator to the R language starting in release 4.1.
+
+- The native pipe operator is `|>`
+
+\medskip
+
+The native pipe operator works similarly to the magrittr pipe:
+
+  - `x |> f()` is equivalent to `f(x)`
+  - `x |> f(y)` is equivalent to `f(x,y)`.
+
+\medskip
+
+`magrittr` pipe allows you to drop parentheses for single argument functions, but this is not allowed with the native pipe:
+
+\medskip
+
+```{r, eval = FALSE}
+pi %>% cos   # equivalent to pi %>% cos()
+pi |> cos  # this is an error with the native pipe
+pi |> cos()  # must add parentheses with native pipe
+```  
+  
+## Placeholder, magrittr pipes
+
+`magrittr` pipe allows you to use a "placeholder" symbol (`.`) for cases where the object your piping is not the first argument in the function being called:
+
+```{r}
+# the period (.) is the placeholder
+c("A", "B", "C") %>% 
+  data.frame(x = c(1,2,3), y = .)
+```
+
+\medskip
+
+`magrittr` placeholder can appear multiple times:
+
+```{r}
+c("A", "B", "C") %>% 
+  tibble(x = c(1,2,3), y = ., z = str_to_lower(.))
+```
+
+## Placeholder, native pipes
+
+A placeholder symbol (`_`) for use with the native pipe was introduced in R 4.2, but it has several limitations:
+
+- Can only appear once
+- Can only be used with named arguments
+
+\medskip
+
+This works:
+
+```{r}
+c("A", "B", "C") |> 
+  tibble(x = c(1,2,3), y = _)
+```
+
+\medskip
+
+But this doesn't:
+
+```{r, eval=FALSE}
+c("A", "B", "C") |> 
+  tibble(x = c(1,2,3), y = _, z = str_to_lower(_))
+```
+
+
+
+## What is `dplyr`?
+
+`dplyr` is a package that provides a "grammar for data manipulation"
+
+\bigskip
+
+Core "verbs" in the `dplyr` package:
+
+Column manipulation:
+
+  * `select()`
+  * `mutate()`  
+  
+Row manipulation:
+
+  * `filter()`
+  * `arrange()`
+  
+Collapsing and Grouping:
+
+  * `summarize()`
+  * `group_by()`
+  
+\bigskip
+
+All these functions return new data frames instead of modifying existing data frames
+
+
+
+## `select()` subsets columns
+
+```{r, echo = TRUE}
+# select two columns
+select(iris, Sepal.Length, Petal.Length) |> head(3)
+```
+
+\medskip
+
+```{r, echo = TRUE}
+# select everything BUT the species column
+select(iris, -Species) |> head(3)
+```
+
+## `select()` has some helper functions for powerful filtering
+
+See https://tidyselect.r-lib.org/reference/language.html
+
+\bigskip
+
+* `var1:var10`: variables lying between var1 on the left and var10 on the right. Also works with numeric indices.
+* `everything()`: all variables.
+* `all_of(vars)/any_of(vars)`: matches names stored in the character vector vars. 
+* `last_col()`: furthest column on the right.
+* `where(predicate)`: all variables where predicate function returns TRUE. e.g `where(is.numeric)`
+* `starts_with()`: Starts with an exact prefix.
+* `ends_with()`: Ends with an exact suffix.
+* `contains()`: Contains a literal string.
+* `matches()`: Matches a regular expression.
+* `num_range()`: Matches a numerical range like x01, x02, x03.
+
+
+## `select()` helper examples
+
+```{r, size = "small"}
+select(iris, starts_with("Petal")) |> head(3)
+```
+
+\medskip
+
+```{r, size = "small"}
+select(iris, ends_with("Length")) |> head(3)
+```
+
+\medskip
+```{r, size = "small"}
+select(iris, where(is.numeric)) |> head(3)
+```
+
+
+## `mutate()` adds or transforms columns
+
+\footnotesize
 
 ```{r, echo=TRUE}
-filtered.Sepal.means <-
-  iris %>%
-  filter(Species != "virginica") %>%
-  group_by(Species) %>%
+mutate(iris, Species = str_to_upper(Species)) |> head(3)
+```
+
+\medskip
+
+```{r}
+# mutate can refer to multiple existing columns
+iris |>
+  select(starts_with("Sepal")) |>
+  mutate(Sepal_Sum = Sepal.Width + Sepal.Length) |>
+  head(3)
+```
+
+\medskip
+
+```{r}
+# can refer to columns created "on the fly"
+iris |>
+  select(starts_with("Sepal")) |>
+  mutate(Sepal_Sum = Sepal.Width + Sepal.Length,
+         Sepal_Width_Ratio = Sepal.Width / Sepal_Sum) |>
+  head(3)
+```
+
+\normalsize
+
+
+## `filter()` selects rows that match criteria
+
+```{r, echo = TRUE}
+# get only the I. setosa specimens
+filter(iris, Species == "setosa") |> head(3)
+```
+
+\medskip
+
+```{r, echo=TRUE}
+# filter on multiple criteria, treated as "AND"
+filter(iris, Species == "setosa", Sepal.Length < 5) |> head(3)
+```
+
+## `arrange()` sorts rows according to values of one or more columns
+
+\small
+
+```{r, size="small"}
+# sort by Sepal.Length
+arrange(iris, Sepal.Length) |> head(3)
+```
+
+\medskip
+
+```{r, size="small"}
+# sort on multiple columns: by Sepal.Length then by Petal.Length
+arrange(iris, Sepal.Length, Petal.Length) |> head(3)
+```
+
+\medskip
+
+```{r, size = "small"}
+# sort in descending order using helper desc()
+arrange(iris, desc(Sepal.Length)) |> head(3)
+```
+
+\normalsize
+
+
+## `summarize()` transforms and collapses
+
+`summarize()` applies functions to one or more variables (columns) in the data frame, reducing a vector of values to a single value and returning the results in a data frame
+
+\bigskip
+
+```{r, echo=TRUE, collapse_vspace=TRUE}
+summarize(iris, 
+          avg.Sepal.Length = mean(Sepal.Length), 
+          avg.Petal.Length = mean(Petal.Length))
+
+```
+
+## `group_by()` is used for conditioning (faceting) and transforming
+
+```{r, echo=TRUE}
+# apply grouping
+grouped.df <- group_by(iris, Species)
+
+# summarize grouped data frame
+summarize(grouped.df,
+          avg.Sepal.Length = mean(Sepal.Length),
+          avg.Petal.Length = mean(Petal.Length))
+
+```
+
+
+
+## The `dplyr` functions are designed to work well with piping!
+
+
+```{r}
+iris |>
+  filter(Species != "virginica") |>
+  group_by(Species) |>
   summarize(avg.Sepal.Length = mean(Sepal.Length),
             avg.Sepal.Width = mean(Sepal.Width))   
-
-
-filtered.Sepal.means
 ```
+
+## dplyr pipelines feed naturally into ggplot
+
+
+But note that `ggplot` layers are "added" *not* piped:
+
+\medskip
+
+\footnotesize
+```{r, collapse=FALSE, fig.align='center',out.width = "60%"}
+iris |>
+  filter(Species != "virginica") |>
+  ggplot(aes(x = Sepal.Length, y = Sepal.Width, color = Species)) + 
+    geom_point(size=3) + 
+    labs(x = "Sepal Length", y = "Sepal Width",
+         title = "Sepal Morphology for non-virginica Iris species") +
+    theme_classic() +
+    theme(legend.justification = c(1, 1), legend.position = c(1, 1))
+```
+\normalsize
+
+## Other `dplyr` verbs of interest
+
+Column manipulation:
+
+* `rename()` - change column names
+* `relocate()` - change column positions
+* `pull()` - similar to `$`, returns a vector rather than a data frame
+
+\medskip
+
+Row manipulation:
+
+* `slice()` - index rows by integer locations.
+  - `slice` variants: `slice_head()`, `slice_tail()`, `slice_min()`, `slice_max()`, `slice_sample()`
+* `distinct()` - collapse data frames into rows that are unique; usually used with subset of columns
+
+Group manipulation
+
+* `count()` - counts observations in a specified groups
 
