@@ -12,14 +12,13 @@ execute:
 
 ## Robust code
 
-
 I encourage you to write "robust" code solutions whenever possible.
 
 A good rule of thumb for judging whether your solution is appropriately "robust" is to ask yourself:
 
 > If I added additional observations or variables to this data set, or if the order of variables changed, would my code still compute the right solution?
 
-## Accessing lists 
+## Accessing lists
 
 ```{r}
 john <- list(fname = "John", lname = "Smithee", age = 24,
@@ -37,16 +36,19 @@ phone.book <- list(john, jane, jack, jill)
 Q: Write a code block illustrating how you could use list indexing to get back the first and last name of the first person in the phone book. The returned object should be a list.
 
 #### Solution 1
+
 ```{r}
 #| output: false
 phone.book[[1]][c(1,2)]
 ```
+
 #### Solution 2
 
 ```{r}
 #| output: false
 phone.book[[1]][c("fname", "lname")]
 ```
+
 ## Data frame filtering
 
 ```{r}
@@ -58,7 +60,7 @@ df <- data.frame(
 df
 ```
 
-Q: Write a code block showing how to create a new data frame that includes only the odd numbered rows (i.e. rows 1, 3, 5, …) and just the age and sex columns from df
+Q: Write a code block showing how to create a new data frame that includes only the odd numbered rows (i.e. rows 1, 3, 5, ...) and just the age and sex columns from df
 
 #### Solution 1
 
@@ -80,7 +82,3 @@ df[seq(1, 10, by = 2), c("age", "sex")]
 #| output: false
 df[seq(1, nrow(df), by = 2), c("age", "sex")]
 ```
-
-
-
-

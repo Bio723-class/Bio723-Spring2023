@@ -11,7 +11,16 @@ library(tidyverse)
 
 ## Data
 
+```{r}
+absorbance_data_URL <-
+  "https://github.com/Bio724/Bio724-Example-Data/raw/main/crypto_tecan_run_example.txt"
 
+strain_key_URL <- 
+  "https://github.com/Bio724/Bio724-Example-Data/raw/main/crypto_tecan_run_strains.csv"
 
+```
 
 ## Code
+
+Your code and explanations here!
+

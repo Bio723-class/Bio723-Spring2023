@@ -1,0 +1,52 @@
+---
+title: "Bio 723, Assignment 03"
+author: "Your Name and NetID here!"
+format: 
+  html:
+    embed-resources: true
+    fig_caption: true
+---
+
+# Instructions
+
+Create a R Markdown document and answer the questions below using code blocks that generate the correct outputs. I encourage you to use explanatory text in your markdown document, however **each of your solutions should show how to generate the answer using R code**. I encourage you to write "robust" solutions wherever possible. A good rule of thumb for judging whether your solution is appropriately "robust" is to ask yourself "If I added additional observations or variables to this data set, or if the order of variables changed, would my code still compute the right solution?"
+
+Make sure your R Markdown is nicely formatted -- use headers, bullets, numbering, etc so that the structure of the document is clear.
+
+Make sure to "knit" you document before submission to confirm that all code blocks and formatting is as you expect.
+
+When completed, title your R Markdown file as follows:
+
+-   `netid-assignment_03-Spring2023.Rmd`
+
+Submit both your Markdown file and the generated HTML document via the Assignments submission section on Sakai.
+
+# Data
+
+The website ["Information is Beautiful"](https://informationisbeautiful.net/) has lots of interesting data visualizations and "data stories".
+
+One of the data stories of biomedical interest is the [MicrobeScope](https://informationisbeautiful.net/visualizations/the-microbescope-infectious-diseases-in-context/), which presents data on the contagiousness of various microbes and its relationship to deadliness, fatality rate, media coverage, etc.
+
+The following image shows the relationship between contagiousness ($R_0$) and deadliness (case fatality rate).
+
+---
+
+![Deadliness vs contagiousness for a variety of microbial pathogens.](./figures/image_microbescope.png "Title: Microbescope"){#fig-microbescope fig-align="center"}
+
+---
+
+I've made the original data used to produce the figure above available to you as a CSV file at the following URL:
+
+* [Microbescope_original_data.csv](https://github.com/Bio724/Bio724-Example-Data/raw/main/Microbescope_original_data.csv) -- this data was derived from the "original data" sheet in the data provided at http://bit.ly/KIB_Microbescope
+
+
+# Problems
+
+1. Demonstrate how to wrangle the `Microscope_original_data.csv` in a "tidy" form
+
+2. Using your tidy data, produce a bivariate scatter plot similar to the one shown above showing the relationship between contagiousness and deadliness. Focus on the bivariate relationship, point labeling, as well as the information on type of pathogen (shape of points) and transmission method (color). 
+
+   Nicely laid out text labels can be a challenge. The [ggrepel](https://github.com/slowkow/ggrepel) package is be useful to get better layout.  See the [ggrepel vingette](https://cran.r-project.org/web/packages/ggrepel/vignettes/ggrepel.html) for more info.
+
+   NOTE: there is an an odd combined logarithmic/linear y-axis in the figure shown above (a poor choice in my opinion). Don't worry about reproducing this.
+
