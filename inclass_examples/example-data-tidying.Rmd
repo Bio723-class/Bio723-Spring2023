@@ -1,0 +1,178 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+* Deal w/encoding (explore in Visual Studio code)
+* Deal w/extra empty column (use col_select = 1:98 argument to read_tsv)
+* Deal w/names
+* Deal w/extra rows at end
+* Convert time to numeric and minutes
+  - introduce lubridate? as.duration, as.numeric, round
+* Convert temp to numeric
+  - str_split_i
+
+
+
+
+```{r}
+library(tidyverse)
+```
+
+```{r}
+data <- read_tsv("https://github.com/Bio724/Bio724-Example-Data/raw/main/crypto_tecan_run_example.tsv",
+                 col_names = FALSE,
+                 trim_ws = TRUE)
+```
+```{r}
+problems(data)
+```
+
+```{r}
+tail(data)
+```
+
+
+
+```{r}
+data <- read_tsv("~/Downloads/crypto_tecan_run_example.asc",
+                 col_names = FALSE,
+                 col_select = 1:98,
+                 locale = locale(encoding = "windows-1252"))
+```
+
+```{r}
+head(data)
+```
+
+
+
+```{r}
+names(data)
+```
+
+
+```{r}
+
+# Letters A...H repeated 12 times
+row_address <- rep(LETTERS[1:8], 12)
+# Number 1 to 12, each repeated 8 times successivley
+col_address <- rep(1:12, each=8)
+
+
+col_names <-
+  c("time",
+    "temperature",
+    str_c(row_address, col_address, sep = "_"))
+
+data <-
+  read_tsv(
+    "~/Downloads/crypto_tecan_run_example.asc",
+    col_names = col_names,
+    col_select = 1:98,
+    locale = locale(encoding = "windows-1252")
+  ) |>
+  slice_head(n = -2)
+
+```
+```{r}
+names(data)
+```
+```{r}
+head(data)
+```
+
+
+
+```{r}
+tail(data)
+```
+
+
+
+
+```{r}
+data <- 
+  data |> 
+  mutate(time = as.duration(time),
+         temperature = str_split_i(temperature, " ", 1))
+
+data
+```
+
+
+```{r}
+data <-
+  data |>
+  pivot_longer(cols = !c(time, temperature),
+               names_to = "Well",
+               values_to = "OD600")
+data
+```
+
+
+```{r}
+data <-
+  data |> 
+  separate_wider_delim(Well, delim="_", names = c("Row", "Column")) 
+
+data
+```
+
+
+
+```{r, fig.width = 10, fig.height=5}
+
+
+#Position = formatC(Position, flag = "0", width = 2)
+
+data |>
+  mutate(time = as.numeric(time, "hours"),
+         Column = as_factor(Column)) |>
+  ggplot(aes(x = time, y = OD600)) +
+  geom_line() +
+  #ylim(0, 1) +
+  labs(x = "Time (hours)") +
+  facet_grid(rows = vars(Row), cols = vars(Column)) #+
+  # theme(strip.background = element_blank(),
+  #       strip.text.x = element_blank())
+  
+
+```
+
+```{r}
+strains <- read_csv("~/Downloads/crypto_tecan_run_strains.csv")
+```
+```{r}
+strains <-
+  strains |>
+  mutate(row = str_to_upper(row),
+         column = as.character(column)) |>
+  select(-plate)
+  
+strains
+```
+
+```{r}
+growth_complete <-
+  left_join(data, strains, 
+          by = join_by(Row == row, Column == column)) |>
+  mutate(strain = if_else(is.na(strain), "blank", strain))
+
+growth_complete
+```
+
+```{r}
+growth_complete |>
+  mutate(time = as.numeric(time, "hours"),
+         Column = as_factor(Column)) |>
+  ggplot(aes(x = time, y = OD600)) +
+  geom_line() +
+  geom_text(aes(x = -Inf, y = Inf, label = strain,
+                hjust = -0.1, vjust = 1.3), size=2) +
+  labs(x = "Time (hours)") +
+  facet_grid(rows = vars(Row), cols = vars(Column), switch = "y") + 
+  theme_light() + 
+  theme(strip.text.y.left = element_text(angle = 0))
+```
+
