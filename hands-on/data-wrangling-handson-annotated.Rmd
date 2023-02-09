@@ -1,0 +1,236 @@
+---
+title: "Data wrangling hands-on annotated"
+author: "Paul M. Magwene"
+date: "2023-02-08"
+output:
+  html_document:
+    df_print: paged
+---
+
+## Libraries
+
+```{r, warning=FALSE}
+library(tidyverse)
+```
+
+## Data
+
+```{r}
+absorbance_data_URL <-
+  "https://github.com/Bio724/Bio724-Example-Data/raw/main/crypto_tecan_run_example.txt"
+
+strain_key_URL <- 
+  "https://github.com/Bio724/Bio724-Example-Data/raw/main/crypto_tecan_run_strains.csv"
+
+```
+
+The contents of these two spreadsheets are as follows:
+
+* `crypto_tecan_run_example.txt` -- Absorbance readings (OD600) for a 96-well plate containing strains of the fungal pathogen *Cryptococcus neoformans*. Readings were taken every 15 minutes for 72 hours.
+
+* `crypto_tecan_run_strains.csv` -- A key mapping from plate address to yeast strain names (using the systematic naming scheme using for my lab's strain collection)
+
+## Goal
+
+The goal of our analysis is to produce a figure like the following, which shows growth curves for each well in the 96-well plate.  Such figures are useful diagnostics for evaluating these experiments, getting an overview of patterns of growth variation, looking for spatial effects, identifying unexpected results, etc.
+
+
+## Code
+
+### Data complications
+
+A few complications exist with the data.  We explored these in class; they include:
+
+* It uses a non-UTF8 encoding called "windows-1252"
+* Lack of a header w/column names
+* There's any empty last column
+* There are two lines of metadata at the end of the file
+
+
+#### Creating header info
+
+The raw data file lacks a header (column names), so we'll need to create a vector with the appropriate column names.
+
+The first two columns hold Time (s) and Temperature (°C) info.  The subsequent columns are the absorbance readings for each of the 96 wells on the plate.  
+
+The absorbance value columns are given in the order "A1, B1, C1,...A2, B2, C2,...A12, B12, C12,..."
+
+```{r}
+# create c(1, 1, 1,...2, 2, 2,...12, 12, 12...) 8 reps of each number
+col_vals <- rep(1:12, each = 8)
+
+# create c("A", "B", "C", ...."A", "B", "C",...) 12 times
+row_vals <- rep(LETTERS[1:8], times = 12)
+
+#address will be c("A_1", "B_1", "C_1", ...., "A_12", "B_12", "C_12", ...)
+address <- str_c(row_vals, col_vals, sep = "_")
+
+data_names <- c("time", "temp", address)
+data_names
+```
+
+### Loading the data
+
+The following code loads the data using the appropriate encoding and column names (created above), while dropping the empty columns removing metadata rows. Note that this still generates a warning (because of metadata rows), but this can be safely ignored.
+
+```{r}
+data <- read_tsv(
+  absorbance_data_URL,
+  locale = locale(encoding = "windows-1252"),
+  col_names = data_names
+) %>%                   # note use of magrittr pipe to get more powerful placeholder
+  select(.,-ncol(.)) |> # drop last column
+  slice_head(n = -2)    # last two lines are metadata we don't need
+
+```
+### Some quick data checks
+
+The following code blocks involve some standard ways of "looking" at your data to try and insure it's well formed.
+
+```{r}
+dim(data)
+```
+
+
+```{r}
+head(data[1:5])
+```
+
+```{r}
+tail(data[1:5])
+```
+
+
+```{r}
+# head of the last 5 cols of the df
+data |> 
+  select(last_col(5):last_col()) |>
+  head()
+```
+
+```{r}
+# tail of the last 5 cols of the df
+data |> 
+  select(last_col(5):last_col()) |>
+  tail()
+```
+
+
+## Plotting a single well
+
+Now that we've wrangled the data into some basic shape we can start to do something useful with it.  The simplest useful step, towards our end goal, would be to plot a single growth curve from this experiment.  This is relatively straightforward because we have a data frame with `time` as a variable, and many columns (`A_1`, `A_2`, etc) that contains absorbance readings.
+
+Here's a first attempt at plotting the growth curves for a single strain (the well `B_2`):
+
+```{r}
+data |>
+  ggplot(aes(x = time, y = B_2)) +
+  geom_line() + 
+  labs(x = "Time", y = "OD600")
+```
+
+This plotted something, but it doesn't look at all like what we'd expect!  The call to `geom_line()` produced a warning message: "Each group consists of only one observation". What's going on?  
+
+If we look back at our data, we'll see that our time column is of the "character" data type. That's because values are of the form "900s" where the "s" indicates seconds.  If we want to plot a conventional growth curve we have to turn these into numbers.
+
+We have two options:
+
+* We could strip the "s" from each string and then use `as.numeric` to convert the strings to numbers  (`mutate(time = as.numeric(str_replace(time, "s", "")))`)
+
+* We could use the [lubridate](https://lubridate.tidyverse.org/) library that is designed to work with time, date, and duration information to do the conversion for us.  This second option may be preferable, as lubridate has convenient features like the ability to convert between different time units automatically.
+
+```{r, warning=FALSE}
+# lubridate is part of the tidyverse but not loaded by default
+# when we import the tidyverse meta library
+library(lubridate) 
+```
+
+Now we'll use the `as.duration()` function from lubridate to convert the strings to a Duration object which represents differences in time.
+
+```{r}
+data |>
+  mutate(time = as.numeric(as.duration(time), "hours")) |>
+  ggplot(aes(x = time, y = B_2)) +
+    geom_line() + 
+    labs(x = "Time", y = "OD600")
+```
+
+
+
+## Plotting multiple wells in a grid
+
+To plot multiple wells simultaneously we need to have a column in our data frame that represents the address of each well.  Where will this information come from?  In the current case, the column names of the absorbance variables hold this information. Given this, the tidyr function `pivot_longer()` is the right choice to take our "wide" data frame and make it longer, while creating new columns holding the address and absorbance information:
+
+```{r}
+long_data <- 
+  data |>
+  pivot_longer(cols = A_1:H_12,
+               names_to = "address",
+               values_to = "absorbance") 
+
+long_data
+```
+
+
+Having reshaped our data frame, we can now exploit the `facet_wrap()` function of ggplot to create a distinct plot for each well:
+
+```{r}
+long_data |>
+  mutate(time = as.numeric(as.duration(time), "hours")) |>
+  ggplot(aes(x = time, y = absorbance)) +
+    geom_line() + 
+    labs(x = "Time (hours)", y = "OD600") + 
+    facet_wrap(~address, nrow = 8, ncol = 12) 
+```
+Note that the plots are shown in the order expected. For example the first row is "A_1", "A_10", "A_11", etc.  Why is this?  It turns out that R is sorting our address variable in "string order" rather than numeric order.  We can deal with this by transforming our address variable to a factor rather than string. For our purposes the function `forcats::as_factor()` is the best way to do this (forcats is another tidyverse package), as the built-in `as.factor()` function still creates factors using the string sorting order rather than the order in which the strings are given.
+
+
+```{r}
+long_data |>
+  mutate(time = as.numeric(as.duration(time), "hours"),
+         address = as_factor(address)) |>
+  ggplot(aes(x = time, y = absorbance)) +
+    geom_line() + 
+    labs(x = "Time (hours)", y = "OD600") + 
+    # note the use of dir = "v" to specify the direction by which
+    # the facets are drawn. This makes our order of plots match
+    # the same order as in the 96-well plates
+    facet_wrap(~address, nrow = 8, ncol = 12, dir = "v") 
+```
+
+## Plotting multiple wells in a grid, part II
+
+The `facet_wrap()` approach above works alright but I'm not crazy about the facet lables above each plot.  In addition the single `address` column confounds two pieces of information -- the row and column where each well is located.  If one were analyzing an experiment for unwanted spatial effects both of these pieces of information would be important.
+
+To solve this issues we're going to make our "long" data frame a little wider by splitting up the address variable into two separate columns, `row_address` and `column_address`. The tidyr function `separate_wider_delim()` is a convenient way to do this:
+
+
+```{r}
+addressed_data <-
+  long_data |>
+  separate_wider_delim(address,
+                       delim = "_",
+                       names = c("row_address", "col_address")) |>
+  # convert row and col address to factors for reasons
+  # discussed in prior section
+  mutate(time = as.duration(time),
+         row_address = as_factor(row_address),
+         col_address = as_factor(col_address)) 
+
+head(addressed_data)
+```
+
+Now that we have two address variables we can employ `facet_grid()` rather than `facet_wrap()` to generate our plot:
+
+```{r, fig.width = 10, fig.height = 5}
+addressed_data |>
+  ggplot(aes(x = as.numeric(time, "hours"), y = absorbance)) +
+    geom_line() + 
+    labs(x = "Time (hours)", y = "OD600") + 
+    facet_grid(rows = vars(row_address), 
+               cols = vars(col_address)) +
+    theme_light()
+```
+
+Voila!
+
