@@ -15,28 +15,29 @@ To provide you with experience in producing publication quality figures, you'll 
 
 ![A multi-part figure based on morphological measurements from the palmerpenguins library.](advanced-ggplot-goal.png){#fig-goal}
 
-
 ## Subplot 1
 
-Description: A bivariate scatter plot depicted the joint distribution of 
+Description: A bivariate scatter plot depicting the joint distribution of bill variables in the Palmer penguins data set
 
 Key tweaks:
 
-* Uses RColorBrewer color scheme "Dark2"
-* Legend labels to have latinate names and those names are italicized. Achieved using `ggtext::element_markdown()` and changing the `legend.text` parameter in `theme()`
-* Legend text and symbols increased in size for readability (see `guides()` and `guide_legend()`)
+-   Plot uses both shape and color of points to distinguish between species
+-   Uses RColorBrewer color scheme "Dark2"
+-   Legend text and symbols increased in size for readability (see `guides()` and `guide_legend()`)
+-   Legend labels to have latinate names and those names are italicized. Achieved using `ggtext::element_markdown()` and changing the `legend.text` parameter in `theme()`
 
 ![Subplot 1.](penguins-subplot-01.png){#fig-subplot01}
 
 ## Subplot 2
 
-Description: A distribution plot comparing the distributions of "bill ratio", a derived variable calculated as the ratio of bill width to bill length.
+Description: A distribution plot comparing the distributions of "bill ratio", a derived variable calculated as the ratio of bill depth to bill length.
 
 Key tweaks:
 
-* Uses `ggdist:stat_dotsinterval` geom
-* Species names placed in the figure itself using `ggtext::geom_richtext()`
-* Y-axis lines and ticks removed
+-   Uses `stat_dotsinterval` geom from the `ggdist` package
+-   Legend suppressed
+-   Species names placed in the figure itself using `ggtext::geom_richtext()`
+-   Y-axis lines and ticks removed
 
 ![Subplot 2.](penguins-subplot-02.png){#fig-subplot02}
 
@@ -46,9 +47,9 @@ Description: Violin plots comparing the distribution of "bill ratio" between fem
 
 Key tweaks:
 
-* Removed the `strip` names created by the faceting 
-* Removed the default legend (redundant with the facet names)
-* Moved species names into the body of the figure using `ggtext::geom_richtext()`
+-   Removed the `strip` names created by the faceting
+-   Removed the default legend (redundant with the facet names)
+-   Moved species names into the body of the figure using `ggtext::geom_richtext()`
 
 ![Subplot 3.](penguins-subplot-03.png){#fig-subplot03}
 
@@ -56,8 +57,8 @@ Key tweaks:
 
 Key tweaks:
 
-* Load an image file, this [penguin illustration](https://allisonhorst.github.io/palmerpenguins/reference/figures/culmen_depth.png) from the palmerpenguins web site
+-   Using the `magick` package, load an image file -- this [penguin illustration](https://allisonhorst.github.io/palmerpenguins/reference/figures/culmen_depth.png) from the palmerpenguins web site
 
-* Use `patchwork` to define the layout of the subplots, the image, and the "shared" legend
+-   Use the `patchwork` package to define the layout of the subplots, the image, and the "shared" legend
 
-* Save the image to high resolution PNG and PDF
+-   Save the image to high resolution PNG and PDF using `ggsave()`

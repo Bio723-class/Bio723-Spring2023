@@ -2963,12 +2963,13 @@ vertical-align: -.125em;
 </section>
 <section id="subplot-1" class="level2">
 <h2 class="anchored" data-anchor-id="subplot-1">Subplot 1</h2>
-<p>Description: A bivariate scatter plot depicted the joint distribution of</p>
+<p>Description: A bivariate scatter plot depicting the joint distribution of bill variables in the Palmer penguins data set</p>
 <p>Key tweaks:</p>
 <ul>
+<li>Plot uses both shape and color of points to distinguish between species</li>
 <li>Uses RColorBrewer color scheme “Dark2”</li>
-<li>Legend labels to have latinate names and those names are italicized. Achieved using <code>ggtext::element_markdown()</code> and changing the <code>legend.text</code> parameter in <code>theme()</code></li>
 <li>Legend text and symbols increased in size for readability (see <code>guides()</code> and <code>guide_legend()</code>)</li>
+<li>Legend labels to have latinate names and those names are italicized. Achieved using <code>ggtext::element_markdown()</code> and changing the <code>legend.text</code> parameter in <code>theme()</code></li>
 </ul>
 <div id="fig-subplot01" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
@@ -2979,10 +2980,11 @@ vertical-align: -.125em;
 </section>
 <section id="subplot-2" class="level2">
 <h2 class="anchored" data-anchor-id="subplot-2">Subplot 2</h2>
-<p>Description: A distribution plot comparing the distributions of “bill ratio”, a derived variable calculated as the ratio of bill width to bill length.</p>
+<p>Description: A distribution plot comparing the distributions of “bill ratio”, a derived variable calculated as the ratio of bill depth to bill length.</p>
 <p>Key tweaks:</p>
 <ul>
-<li>Uses <code>ggdist:stat_dotsinterval</code> geom</li>
+<li>Uses <code>stat_dotsinterval</code> geom from the <code>ggdist</code> package</li>
+<li>Legend suppressed</li>
 <li>Species names placed in the figure itself using <code>ggtext::geom_richtext()</code></li>
 <li>Y-axis lines and ticks removed</li>
 </ul>
@@ -3013,9 +3015,9 @@ vertical-align: -.125em;
 <h2 class="anchored" data-anchor-id="multi-plot-layout">Multi-plot layout</h2>
 <p>Key tweaks:</p>
 <ul>
-<li><p>Load an image file, this <a href="https://allisonhorst.github.io/palmerpenguins/reference/figures/culmen_depth.png">penguin illustration</a> from the palmerpenguins web site</p></li>
-<li><p>Use <code>patchwork</code> to define the layout of the subplots, the image, and the “shared” legend</p></li>
-<li><p>Save the image to high resolution PNG and PDF</p></li>
+<li><p>Using the <code>magick</code> package, load an image file – this <a href="https://allisonhorst.github.io/palmerpenguins/reference/figures/culmen_depth.png">penguin illustration</a> from the palmerpenguins web site</p></li>
+<li><p>Use the <code>patchwork</code> package to define the layout of the subplots, the image, and the “shared” legend</p></li>
+<li><p>Save the image to high resolution PNG and PDF using <code>ggsave()</code></p></li>
 </ul>
 </section>
 
