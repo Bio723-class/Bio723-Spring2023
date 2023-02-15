@@ -1,0 +1,63 @@
+---
+title: "Advanced ggplot2: In class"
+author: "Paul M. Magwene"
+format: 
+  html:
+    embed-resources: true
+    fig_caption: true
+---
+
+## Goal
+
+The goal of today's class session is to learn how to produce customized and polished data visualizations using the `ggplot2` package. Generating basic data visualizations in ggplot can be relatively easy, but tweaking and customizing a figures to the point where it's "publication quality" can often involve quite a bit of additional work such as figuring out what key aesthetic properties to tweak, generating derived data for annotations, etc.
+
+To provide you with experience in producing publication quality figures, you'll work with your fellow classmates with the aim of reproducing the figure shown below.
+
+![A multi-part figure based on morphological measurements from the palmerpenguins library.](advanced-ggplot-goal.png){#fig-goal}
+
+
+## Subplot 1
+
+Description: A bivariate scatter plot depicted the joint distribution of 
+
+Key tweaks:
+
+* Uses RColorBrewer color scheme "Dark2"
+* Legend labels to have latinate names and those names are italicized. Achieved using `ggtext::element_markdown()` and changing the `legend.text` parameter in `theme()`
+* Legend text and symbols increased in size for readability (see `guides()` and `guide_legend()`)
+
+![Subplot 1.](penguins-subplot-01.png){#fig-subplot01}
+
+## Subplot 2
+
+Description: A distribution plot comparing the distributions of "bill ratio", a derived variable calculated as the ratio of bill width to bill length.
+
+Key tweaks:
+
+* Uses `ggdist:stat_dotsinterval` geom
+* Species names placed in the figure itself using `ggtext::geom_richtext()`
+* Y-axis lines and ticks removed
+
+![Subplot 2.](penguins-subplot-02.png){#fig-subplot02}
+
+## Subplot 3
+
+Description: Violin plots comparing the distribution of "bill ratio" between female and male penguins, faceted by species.
+
+Key tweaks:
+
+* Removed the `strip` names created by the faceting 
+* Removed the default legend (redundant with the facet names)
+* Moved species names into the body of the figure using `ggtext::geom_richtext()`
+
+![Subplot 3.](penguins-subplot-03.png){#fig-subplot03}
+
+## Multi-plot layout
+
+Key tweaks:
+
+* Load an image file, this [penguin illustration](https://allisonhorst.github.io/palmerpenguins/reference/figures/culmen_depth.png) from the palmerpenguins web site
+
+* Use `patchwork` to define the layout of the subplots, the image, and the "shared" legend
+
+* Save the image to high resolution PNG and PDF
