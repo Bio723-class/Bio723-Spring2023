@@ -1,0 +1,39 @@
+---
+title: "Bio 723, Assignment 04"
+author: "Your Name and NetID here!"
+format: 
+  html:
+    embed-resources: true
+    fig_caption: true
+---
+
+# Instructions
+
+Create a R Markdown document and answer the questions below using code blocks that generate the correct outputs. I encourage you to use explanatory text in your markdown document, however **each of your solutions should show how to generate the answer using R code**. I encourage you to write "robust" solutions wherever possible. A good rule of thumb for judging whether your solution is appropriately "robust" is to ask yourself "If I added additional observations or variables to this data set, or if the order of variables changed, would my code still compute the right solution?"
+
+Make sure your R Markdown is nicely formatted -- use headers, bullets, numbering, etc so that the structure of the document is clear.
+
+Make sure to "knit" you document before submission to confirm that all code blocks and formatting is as you expect.
+
+When completed, title your R Markdown file as follows:
+
+-   `netid-assignment_04-Spring2023.Rmd`
+
+Submit both your Markdown file and the generated HTML document via the Assignments submission section on Sakai.
+
+# Problems
+
+1. Find a recent published paper from your field of interest that meets the following criteria:
+
+   a. The paper includes figure illustrating the distribution of one or more variables that are reported in this study.
+  
+   a. The authors provide the raw data (perhaps as supplementary material or via a standard repository) that would be needed to reproduce the figure
+   
+   Provide a citation and link to the paper, note the figure number,explain what the figure illustrates/describes, and provide a link to the raw data.
+   
+   Extra credit: embed the figure in your HTML output using standard R Markdown conventions for image inclusion.
+  
+   
+2. Outline, in words, key steps that would be required to reproduce the figure identified above from the raw data provided.  What sort of data tidying and transformations would be required?  Can the figure be produced with a standard ggplot geom(s)? Would a single ggplot layer be sufficient, or would multiple geoms be required?
+
+
