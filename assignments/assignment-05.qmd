@@ -1,0 +1,53 @@
+---
+title: "Bio 723, Assignment 05"
+author: "Your Name and NetID here!"
+format: 
+  html:
+    embed-resources: true
+    fig_caption: true
+---
+
+# Instructions
+
+Create a R Markdown document and answer the questions below using code blocks that generate the correct outputs. I encourage you to use explanatory text in your markdown document, however **each of your solutions should show how to generate the answer using R code**. I encourage you to write "robust" solutions wherever possible. A good rule of thumb for judging whether your solution is appropriately "robust" is to ask yourself "If I added additional observations or variables to this data set, or if the order of variables changed, would my code still compute the right solution?"
+
+Make sure your R Markdown is nicely formatted -- use headers, bullets, numbering, etc so that the structure of the document is clear.
+
+Make sure to "knit" you document before submission to confirm that all code blocks and formatting is as you expect.
+
+When completed, title your R Markdown file as follows:
+
+-   `netid-assignment_05-Spring2023.Rmd`
+
+Submit both your Markdown file and the generated HTML document via the Assignments submission section on Sakai.
+
+# Problems
+
+**IMPORTANT**: In implementing the following functions the only "built-in" R functions you are allowed to use are the basic numerical operators (+, -, *, /), as well as the `sum()` and `sqrt()` functions. For-loops are not permitted and you may not use the built-in inner product operator (`%*%`). You can, and should, implement the later functions in terms of the earlier functions you've defined.
+
+
+1. Write a function, `vec.dot(x,y)`, that calculates the dot product of two vectors, `x` and `y`, of arbitrary number of elements.  
+\ 
+
+1. Write a function, `vec.length(x)`, that calculates the Euclidean length of a vector.  
+\ 
+
+1. Write a function `vec.cosine(x,y)`, that calculates the cosine of the angle between two vectors using your `vec.dot()` and `vec.length()` functions.  
+\ 
+
+1. Write a function `vec.angle(x, y, deg=FALSE)` that by defaults calculates the angle, in radians, between two vectors. When the argument `deg=TRUE` your function should return the angle in degrees. You may use the built-in `acos()` function in your implementation.  
+\ 
+
+1. Write a function, `vec.distance(x,y)` that calculates the distance between two vectors (i.e. distance between their end points).  
+\ 
+
+1. Write a function `vec.mean(x)` that calculates the mean of x, using vector algebraic operations. Compare the results with built-in `mean()` function, using data from `palmerpenguins::penguins`, to make sure your function works properly.   
+\ 
+
+1. Write a function `vec.cov(x,y)` that calculates the covariance of x and y, using vector algebraic operations. Remember to mean center! Compare the results with built-in `cov()` function, using data from `palmerpenguins::penguins`, to make sure your function works properly.  
+\ 
+
+1. Write a function `vec.var(x)` that calculates the variance of x, using vector algebraic operations. Remember to mean center! Compare the results with built-in `var()` function, using data from `palmerpenguins::penguins`,  to make sure your function works properly.  
+\ 
+
+1. Write a function `vec.cor(x,y)` that calculates the correlation of two vectors, x and y, using vector algebraic operations. Remember to mean center! Compare the results with built-in `cor()`, using data from `palmerpenguins::penguins`, function to make sure your function works properly.
