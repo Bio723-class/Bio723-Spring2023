@@ -23,7 +23,7 @@ Submit both your Markdown file and the generated HTML document via the Assignmen
 
 # Problems
 
-**IMPORTANT**: In implementing the following functions the only "built-in" R functions you are allowed to use are the basic numerical operators (+, -, *, /), as well as the `sum()` and `sqrt()` functions. For-loops are not permitted and you may not use the built-in inner product operator (`%*%`). You can, and should, implement the later functions in terms of the earlier functions you've defined.
+**IMPORTANT**: In implementing the following functions the only "built-in" R functions you are allowed to use are the basic numerical operators (+, -, *, /), as well as the `sum()` and `sqrt()` functions. You may not use the built-in inner product operator (`%*%`).  For-loops are not permitted but `if-else` statements are allowed if required (only one of the problems below should require this). You can, and should, implement the later functions in terms of the earlier functions you've defined.
 
 
 1. Write a function, `vec.dot(x,y)`, that calculates the dot product of two vectors, `x` and `y`, of arbitrary number of elements.  
