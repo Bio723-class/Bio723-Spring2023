@@ -1,0 +1,1022 @@
+%!TEX program = xelatex
+\documentclass{beamer}
+
+\input{../slidespreamble.tex}
+
+%===========================================================
+% Title Info
+\title{Scientific Computing for Biologists}
+\subtitle{Data as Vectors: Introduction to Vector Geometry} % (optional)
+\date{}
+\author[P. Magwene]{Instructor: Paul M. Magwene}
+
+
+\begin{document}
+%===========================================================
+\begin{frame}
+\titlepage
+\end{frame}
+
+%===========================================================
+\begin{frame}
+  \frametitle{Overview of Lecture}
+
+\begin{itemize}
+        \item Variable space/Subject space representations
+		\item Vector Geometry
+		\begin{itemize}
+			\item Vectors are directed line segments
+			\item Vector length
+		\end{itemize}
+		\item Vector Arithmetic
+		\begin{itemize}
+			\item Addition, subtraction
+			\item Scalar multiplication
+			\item Linear combinations of vectors
+			\item Dot product and projection
+		\end{itemize}
+		\item Vector representations of multivariate data
+        \begin{itemize}
+			\item Mean as projection in subject space
+			\item Bivariate regression in geometric terms
+%			\item Difference in group means as a regression problem
+		\end{itemize}
+\end{itemize}
+
+\end{frame}
+%===========================================================
+
+% %===========================================================
+% \begin{frame}
+%   \frametitle{Hands-on Session}
+% 		\begin{itemize}
+%           \item Visualizing bivariate relationships in R
+% 		  \item Vector mathematics in R
+% 		  \item Writing functions in R
+% 		  \item Correlation and linear regression in R
+% 	 \end{itemize}
+% \end{frame}
+% %===========================================================
+
+%===========================================================
+\begin{frame}
+  \frametitle{Variable Space Representation of a Data Set}
+
+Consider a data set in which we've measured variables $\mathbf{X} = {X_1, X_2,\ldots,X_p}$, on a set of subjects (objects) $a_1,...,a_n$.
+
+\begin{center}
+    \begin{tabular}{l|cc}
+
+ & $X_1$ & $X_2$ \\ \hline
+
+$a_1$ & 0.9 & 1.4 \\
+$a_2$ & 1.1 & 1.7 \\
+$\vdots$ & $\vdots$ & $\vdots$ \\
+$a_n$ & 0.5 &  1.55
+
+    \end{tabular}
+\end{center}
+
+Such data is most often represented by drawing the objects as points in space of dimension $p$. This is the \emph{variable space representation} of the data.
+
+\begin{center}
+
+\begin{tikzpicture}[x=0.25cm, y=0.25cm]
+
+\draw[->] (-8,0) -- (8,0);
+\draw (8,0) node[right,font=\footnotesize] {$X_1$};
+
+\draw[->] (0,-4) -- (0,4);
+\draw (0,4) node[above,font=\footnotesize] {$X_2$};
+
+\draw plot[only marks, mark=ball] coordinates { (-3.5,-1) (-3,-2) (-1,-1.5) (-1,0.25) (0,-1.5) (0,0.1) (0.5,1.6) (1,2.5) (2,0.5) (2,3) (3,2.5) };
+
+\end{tikzpicture}
+\end{center}
+
+
+\end{frame}
+%===========================================================
+
+%===========================================================
+\begin{frame}
+  \frametitle{Subject Space Representation of a Data Set}
+
+\begin{small}
+
+An alternate representation is to consider the variables in the space of the subjects. This is the \emph{subject space} representation.
+% \begin{itemize}
+% \item trickier to visualize because high dimensional
+% \end{itemize}
+
+\medskip
+
+How do we come up with a useful representation of variables in subject space?
+\begin{itemize}
+ % \item Any pair of non-parallel vectors (of arbitrary dimension) defines a plane.
+ \item Let the variables be represented by centered vectors
+ \begin{itemize}
+    \item lengths of vectors are proportional to standard deviation
+    \item angle between vectors represents association or similarity
+ \end{itemize}
+\end{itemize}
+\end{small}
+
+\begin{center}
+
+\begin{tikzpicture}[x=0.5cm, y=0.5cm]
+
+\draw[thick,->] (0,0) -- (3,2);
+\draw (3,2) node[right] {$\bvec{x_1}$};
+
+\draw[thick,->] (0,0) -- (5,-1);
+\draw (5,-1) node[above] {$\bvec{x_2}$};
+
+\end{tikzpicture}
+\end{center}
+
+This representation of variables as vectors in the space of the subjects is the view that we'll develop over the next few lectures.
+
+
+\end{frame}
+%===========================================================
+
+
+
+
+%===========================================================
+\begin{frame}
+  \frametitle{Vector Geometry}
+
+Vectors are directed line segments.
+
+\[
+\bvec{x} = \left[ 
+\begin{array}{c} 
+  x_1 \\
+  x_2 \\
+  \vdots \\
+  x_n \\
+\end{array} \right] = [x_1,x_2, \cdots, x_n]'
+\]
+
+\begin{center}
+
+\begin{tikzpicture}[x=0.35cm, y=0.35cm]
+\draw[step=1.0, style=help lines] (-5.9,-2.9) grid (5.9,5.9);
+
+\draw (-6,0) -- (6,0);
+\draw (0,-3) -- (0,5);
+
+\draw[thick,red,->] (0,0) -- (3,4);
+\draw (3,4) node[above right] {$\bvec{x}$};
+
+\draw[thick,blue,->] (-1,-1) -- (-2,5);
+\draw (-2,5) node[above right] {$\bvec{y}$};
+
+\end{tikzpicture}
+
+\end{center}
+
+All of the figures and algebraic formulas I show you apply to $n$-dimensional vectors.
+
+
+\end{frame}
+%===========================================================
+
+%===========================================================
+\begin{frame}
+  \frametitle{Vector Geometry}
+
+Vectors have direction and length:
+ 
+\[
+\bvec{x} = [x_1,x_2]' = [2,3]';\; |\bvec{x}| = \sqrt{x_1^2 + x_2^2 + \cdots + x_n^2}
+\]
+
+\begin{center}
+
+\begin{tikzpicture}[x=0.4cm, y=0.4cm]
+
+
+\draw [step=1.0,style=help lines] (-5.9,-4.9) grid (5.9,4.9);
+\draw (-6,0) -- (6,0);
+\draw (0,-5) -- (0,5);
+
+\draw[thick,red,->] (0,0) -- (2,3);
+\draw (2,3) node[above right] {$\bvec{x}$};
+
+\draw[thick,blue,->] (1,-3) -- (3,0);
+\draw (3,0) node[above right] {$\bvec{y}$};
+
+\end{tikzpicture}
+\end{center}
+
+Often starting point is ignored, in which case $\bvec{x} = \bvec{y}$.
+
+
+\end{frame}
+%===========================================================
+
+%===========================================================
+\begin{frame}
+  \frametitle{Scalar Multiplication of a Vector}
+
+Let $k$ be a scalar.
+
+\[
+k \bvec{x} = \left[ 
+\begin{array}{c} k x_1 \\
+                 k x_2 \\
+                 \vdots \\
+                 k x_n \\
+\end{array} \right]
+\]
+
+\begin{center}
+
+\begin{tikzpicture}[x=0.5cm, y=0.5cm]
+
+\draw[step=0.5cm, style=help lines] (-1.9,-1.9) grid (6.9,4.9);
+\draw (-2,0) -- (6,0);
+\draw (0,-2) -- (0,5);
+
+\draw[thick,red,->] (0,0) -- (2,1);
+\draw (2,1) node[below right] {$\bvec{x}$};
+
+\draw[thick,->] (2,1) -- (6,3);
+\draw (6,3) node[above left] {$3 \bvec{x}$};
+
+\end{tikzpicture}
+
+$\bvec{x} = [2,1]'; \; 3\bvec{x} = [6,3]'$.
+
+\end{center}
+
+
+
+
+\end{frame}
+%===========================================================
+
+%===========================================================
+\begin{frame}
+  \frametitle{Vector Addition}
+
+Let $\bvec{x} = [2,1]'; \; \bvec{y} = [1,3]'$
+
+\[
+\bvec{z} = \bvec{x} + \bvec{y} = \left[ \begin{array}{c} x_1 + y_1 \\
+															x_2 + y_2 \\
+															\vdots \\
+															x_n + y_n
+\end{array} \right]
+\]
+
+\begin{center}
+
+\begin{tikzpicture}[x=0.5cm, y=0.5cm]
+
+\draw[step=0.5cm, style=help lines] (-1.9,-1.9) grid (5.9,4.9);
+\draw (-2,0) -- (6,0);
+\draw (0,-2) -- (0,5);
+
+\draw[thick,red,->] (0,0) -- (2,1);
+\draw (2,1) node[below right] {$\bvec{x}$};
+
+\draw[thin,blue,dashed,->] (2,1) -- ++(1,3);
+
+\draw[thick,blue,->] (0,0) -- (1,3);
+\draw (1,3) node[above left] {$\bvec{y}$};
+
+
+\draw[thick,->] (0,0) -- (3,4);
+\draw (3,4) node[above right] {$\bvec{z}$};
+
+\end{tikzpicture}
+\end{center}
+
+Addition follows the `head-to-tail' rule.
+
+
+\end{frame}
+%===========================================================
+
+%===========================================================
+\begin{frame}
+  \frametitle{Vector Subtraction}
+
+Let $\bvec{x} = [2,1]'; \; \bvec{y} = [1,3]'$
+
+\[
+\bvec{z} = \bvec{x} - \bvec{y} = \left[ \begin{array}{c} x_1 - y_1 \\ x_2 - y_2 \end{array} \right] =
+															\left[ \begin{array}{c} 1 \\ -2 \end{array} \right]
+\]
+
+\begin{center}
+
+\begin{tikzpicture}[x=0.5cm, y=0.5cm]
+
+\draw[step=0.5cm, style=help lines] (-1.9,-2.9) grid (5.9,4.9);
+\draw (-2,0) -- (6,0);
+\draw (0,-3) -- (0,4);
+
+\draw[thick,red,->] (0,0) -- (2,1);
+\draw (2,1) node[below right] {$\bvec{x}$};
+
+\draw[thin,blue,dashed,->] (2,1) -- ++(-1,-3);
+
+\draw[thick,blue,->] (0,0) -- (1,3);
+\draw (1,3) node[above left] {$\bvec{y}$};
+
+
+\draw[thick,->] (0,0) -- (1,-2);
+\draw (1,-2) node[above right] {$\bvec{z}$};
+
+\end{tikzpicture}
+\end{center}
+
+Follow the addition rule for $-1 \bvec{y}$.
+
+
+\end{frame}
+%===========================================================
+
+%===========================================================
+\begin{frame}
+  \frametitle{Linear Combinations of Vectors}
+
+A linear combination of vectors is of the form $z = b_1 \bvec{x} + b_2 \bvec{y}$
+
+
+\[
+\bvec{z} = 3\bvec{x} - 0.5\bvec{y} = 3 \left[ \begin{array}{c} x_1  \\ x_2  \end{array} \right] -
+															0.5 \left[ \begin{array}{c} y_1 \\ y_2 \end{array} \right]
+\]
+
+\begin{center}
+
+\begin{tikzpicture}[x=0.5cm, y=0.5cm]
+
+\draw[step=0.5cm, style=help lines] (-1.9,-2.9) grid (6.9,4.9);
+\draw (-2,0) -- (7,0);
+\draw (0,-3) -- (0,4);
+
+\draw[thick,red,->] (0,0) -- (2,1);
+\draw (2,1) node[above left] {$\bvec{x}$};
+
+\draw[thin,red,dashed,->] (2,1) -- (6,3);
+\draw (6,3) node[above left,font=\footnotesize] {$3\bvec{x}$};
+
+\draw[thin,blue,dashed,->] (6,3) -- (5.5,1.5);
+\draw (5.5, 1.5) node[above right, font=\footnotesize] {$-0.5\bvec{y}$};
+
+\draw[thick,blue,->] (0,0) -- (1,3);
+\draw (1,3) node[above left] {$\bvec{y}$};
+
+\draw[thick,->] (0,0) -- (5.5, 1.5);
+\draw (5.5, 1.5) node[below] {$\bvec{z}$};
+
+\end{tikzpicture}
+\end{center}
+
+
+\end{frame}
+%===========================================================
+
+%===========================================================
+\begin{frame}
+  \frametitle{Dot Product}
+
+The dot (inner) product of two vectors, $\bvec{x} \cdot \bvec{y}$ is a scalar.
+%
+\begin{eqnarray*}
+\bvec{x} \cdot \bvec{y}  & = & x_1 y_1 + x_2 y_2 + \cdots + x_n y_n \\
+					   & = & |\bvec{x}||\bvec{y}| \cos \theta
+\end{eqnarray*}
+%
+where $\theta$ is the angle (in radians) between $\bvec{x}$ and $\bvec{y}$
+
+\begin{center}
+
+\begin{tikzpicture}[x=0.5cm, y=0.5cm]
+
+\draw[step=0.5cm, style=help lines] (-1.9,-2.9) grid (6.9,4.9);
+\draw (-2,0) -- (7,0);
+\draw (0,-3) -- (0,4);
+
+\draw[thick,red,->] (0,0) -- (3,2);
+\draw (2,1) node[below right] {$\bvec{x}$};
+
+\draw[thick,blue,->] (0,0) -- (1,3);
+\draw (1,3) node[above left] {$\bvec{y}$};
+
+\draw (1.5,1) arc (34:69:1cm);
+\path (0,0) ++(55:1.1cm) node[font=\footnotesize] {$\theta$};
+
+\end{tikzpicture}
+
+$ \bvec{x} = [3,2]', \bvec{y} = [1,3]'; \; \bvec{x} \cdot \bvec{y} = \sqrt{13}\sqrt{10}\cos \theta = 9$
+
+\end{center}
+
+
+\end{frame}
+%===========================================================
+
+%===========================================================
+\begin{frame}
+  \frametitle{Useful Geometric Quantities as Dot Product}
+
+
+Length:
+\begin{eqnarray*}
+|\bvec{x}|^2 & = & \bvec{x} \cdot \bvec{x}  =  x_1^2 + x_2^2 + \cdots + x_n^2\\
+|\bvec{y}|^2 & = & \bvec{y} \cdot \bvec{y}
+\end{eqnarray*}
+
+Distance:
+\begin{eqnarray*}
+|\bvec{x}-\bvec{y}|^2 = \bvec{x} \cdot \bvec{x} + \bvec{y} \cdot \bvec{y} - 2 \bvec{x} \cdot \bvec{y}
+\end{eqnarray*}
+
+Angle:
+\begin{eqnarray*}
+\cos \theta = \frac{\bvec{x} \cdot \bvec{y}}{|x||y|}
+\end{eqnarray*}
+
+\begin{center}
+
+\begin{tikzpicture}[x=0.25cm, y=0.25cm]
+
+\draw (-2,0) -- (7,0);
+\draw (0,-3) -- (0,4);
+
+\draw[thick,red,->] (0,0) -- (3,2);
+\draw (2,1) node[right,font=\footnotesize] {$\bvec{x}$};
+
+\draw[thick,blue,->] (0,0) -- (1,3);
+\draw (1,3) node[above,,font=\footnotesize] {$\bvec{y}$};
+
+\draw (0,0) +(34:0.25cm) arc (34:69:0.25cm);
+\path (0,0) ++(55:0.5cm) node[font=\tiny] {$\theta$};
+
+\end{tikzpicture}
+
+\end{center}
+
+\end{frame}
+%===========================================================
+
+%===========================================================
+\begin{frame}
+  \frametitle{Dot Product Properties}
+
+Some additional properties of the dot product that are useful to know:
+
+\begin{eqnarray*}
+\bvec{x} \cdot \bvec{y} & = & \bvec{y} \cdot \bvec{x} \ \mbox{(commutative)} \\
+\bvec{x} \cdot (\bvec{y} + \bvec{z}) & = & \bvec{x} \cdot \bvec{y} + \bvec{x} \cdot \bvec{z} \ \mbox{(distributive)}\\
+(k\bvec{x}) \cdot \bvec{y} & = & \bvec{x} \cdot (k\bvec{y}) = k(\bvec{x} \cdot \bvec{y}) \ \mbox{where $k$ is a scalar} \\
+\bvec{x} \cdot \bvec{y} & = & 0 \ \mbox{iff $\bvec{x}$ and $\bvec{y}$ are orthogonal}
+\end{eqnarray*}
+
+\end{frame}
+%===========================================================
+
+%===========================================================
+\begin{frame}
+  \frametitle{Useful vectors}
+
+\begin{itemize}
+  \item Unit vector in the direction of $\vec{x}$ -- a vector of length one parallel to $\bvec{x}$.  Can be calculated as:
+    $$
+    \text{Unit vector in the direction of } \bvec{x} = \frac{\bvec{x}}{|\bvec{x}|}
+    $$
+  
+  \item {One-vector} -- a $n$-dimensional vector of where every element is the number 1.
+  
+  $$
+  \bvec{1}_n = \left[
+    \begin{array}{c}
+    1 \\
+    1 \\
+    \vdots \\
+    1 \\
+    \end{array}
+  \right]
+  $$
+
+
+
+  Note that 1-vectors are not, in general, unit vectors!
+
+
+
+\end{itemize}
+
+\end{frame}
+%===========================================================
+
+%===========================================================
+\begin{frame}
+  \frametitle{Vector Projection}
+
+The projection of $\bvec{y}$ onto $\bvec{x}$, $P_{\bvec{x}}(\bvec{y})$, is the vector obtained by placing $\bvec{y}$ and $\bvec{x}$ tail to tail and dropping a line, perpendicular to $\bvec{x}$, from the head of $\bvec{y}$ onto the line defined by $\bvec{x}$.
+\[
+P_{\bvec{x}}(\bvec{y}) = \left(\frac{\bvec{x} \cdot \bvec{y}}{|\bvec{x}|}\right) \frac{\bvec{x}}{|\bvec{x}|} = \left(\frac{\bvec{x} \cdot \bvec{y}}{|\bvec{x}|^2}\right)\bvec{x}
+\]
+
+The component of $\bvec{y}$ in $\bvec{x}$, $C_{\bvec{x}}(\bvec{y})$, is the length of $P_{\bvec{x}}(\bvec{y})$.
+\[
+C_{\bvec{x}}(\bvec{y}) = \frac{\bvec{x} \cdot \bvec{y}}{|\bvec{x}|} = |\bvec{y}|\cos \theta
+\]
+
+\begin{center}
+
+\begin{tikzpicture}[x=0.5cm, y=0.5cm]
+
+\draw (-2,0) -- (7,0);
+\draw (0,-1.5) -- (0,4);
+
+\draw[thick,red,->] (0,0) -- (3,0);
+\draw (3,0) node[below] {$\bvec{x}$};
+
+\draw[thick,blue,->] (0,0) -- (2,3);
+\draw (2,3) node[above left] {$\bvec{y}$};
+
+\draw[thin,blue,dashed] (2,3) -- (2,0);
+
+\draw[thick, dashed,->] (0,0) -- (2,0);
+\draw (2,0) node[below left,font=\tiny] {$P_{\bvec{x}}(\bvec{y})$};
+
+\draw (0,0) +(0:0.5cm) arc (0:56:0.5cm);
+\path (0,0) ++(30:0.6cm) node[font=\tiny] {$\theta$};
+
+
+\end{tikzpicture}
+
+
+\end{center}
+
+
+\end{frame}
+%===========================================================
+
+%===========================================================
+\begin{frame}
+  \frametitle{Vector Projection II}
+
+$\bvec{y}$ can be decomposed into two parts:
+
+1. a vector parallel to $\bvec{x}$, $\widehat{y} = P_{\bvec{x}}(\bvec{y})$, 
+
+\smallskip
+
+2. a vector perpendicular to $\bvec{x}$, $\widehat{y}_{\bot}$.
+
+\[
+\bvec{y} = \widehat{y} + \widehat{y}_{\bot}
+\]
+
+\begin{center}
+
+\begin{tikzpicture}[x=0.5cm, y=0.5cm]
+
+\draw (-2,0) -- (7,0);
+\draw (0,-1.5) -- (0,4);
+
+\draw[thick,red,dashed,->] (0,0) -- (3,0);
+\draw (3,0) node[below,font=\small] {$\bvec{x}$};
+
+\draw[thick,blue,->] (0,0) -- (2,3);
+\draw (2,3) node[left] {$\bvec{y}$};
+
+\draw[thick, ->] (2,0) -- (2,3);
+\draw (2,3) node[below right] {$\widehat{y}_{\bot}$};
+
+\draw[thick,->] (0,0) -- (2,0);
+\draw (2,0) node[below left] {$\widehat{y}$};
+
+\end{tikzpicture}
+\end{center}
+
+\begin{itemize}
+ \item $\widehat{y}$  is the closest vector to $\bvec{y}$ in the subspace defined by $\bvec{x}$, i.e. $|\widehat{y}_{\bot}|$ is as small as possible
+ \item $\widehat{y}_{\bot}$ is \emph{orthogonal} to $\widehat{y}$ and $\bvec{x}$.
+\end{itemize}
+
+\end{frame}
+%===========================================================
+
+%===========================================================
+\begin{frame}
+
+\begin{center}
+\LARGE{Vector Geometry of Simple Statistics}
+\end{center}
+
+
+\end{frame}
+%===========================================================
+
+
+%===========================================================
+\begin{frame}
+  \frametitle{Geometry of the Mean in Variables Space}
+
+The mean is a single number summary of a set (vector) of values, $\bvec{x}$.  The mean is `optimal' in that it is the value that minimizes the following quantity:
+
+\begin{equation*}
+ \sum_{i=1}^{n}(x_i-\bar{x})^2 
+\end{equation*}
+
+
+\medskip
+
+\begin{center}
+  \begin{tikzpicture}[x=0.5cm, y=0.5cm]
+  
+  \draw[thick,-] (0,0) -- (10,0);
+  \draw (10,0) node[right] {$\mathbf{x}$};
+  
+  \draw plot[only marks, mark=ball] coordinates { (1,0) (4,0) (2,0) (7,0) (3,0) (9,0) (3.5,0) (9.5,0) (8,0) (4.5,0) };
+  
+  
+  \draw[thick,red,->] (5.15,-2) -- (5.15,0);
+  \draw (5.15,-2) node[below] {$\bar{x}$};
+  
+  %\draw[thick,blue,-] (1,1) -- (5.15,1);
+  \draw (1,1) edge [color = blue,|-|] node[above] {$x_i - \bar{x}$}  (5.15,1);
+  %\draw (3,1.25) node[above] {$x_i - \bar{x}$};
+  
+  
+  \end{tikzpicture}
+  \end{center}
+
+% \begin{center}
+% \begin{tikzpicture}[x=0.5cm, y=0.5cm]
+
+% \draw[thick,-] (0,0) -- (10,0);
+% \draw (10,0) node[right] {$\mathbf{x}$};
+
+% \draw plot[only marks, mark=ball] coordinates { (1,0) (4,0) (2,0) (7,0) (3,0) (9,0) (3.5,0) (9.5,0) (8,0) (4.5,0) };
+
+% \draw[thick,red,->] (5.15,-2) -- (5.15,0);
+% \draw (5.15,-2) node[below] {$\bar{x}$};
+
+
+% \end{tikzpicture}
+% \end{center}
+
+
+
+
+
+\end{frame}
+%===========================================================
+
+
+
+
+%===========================================================
+\begin{frame}
+  \frametitle{Sketch of Proof: Deriving the mean in vector geometric terms, part I}
+
+\begin{itemize}
+
+\item The mean, $\bar{x}$, minimizes the quantity $\sum_{i=1}^{n}(x_i-\bar{x})^2$.
+
+
+\item The above can be written as $|\vec{\mathbf{x}}-\vec{\mathbf{1}}\bar{x}|^2$ where $\bvec{x} = [x_1, x_2, \ldots, x_n]'$ and $\vec{\mathbf{1}} = [1,1,\ldots,1]'$
+
+\item We are look for the scalar multiple, $\bar{x}$, of the one vector that minimizes $|\vec{\mathbf{x}}-\vec{\mathbf{1}}\bar{x}|^2$
+
+\item What does the geometry of $\bvec{x}$, $\bvec{1}$, and $\vec{\mathbf{x}}-\vec{\mathbf{1}}\bar{x}$ look like?
+
+\end{itemize}
+
+\smallskip
+
+\begin{center}
+\begin{tikzpicture}[x=0.5cm, y=0.5cm]
+
+\draw[thick,->] (0,0) -- (6,0);
+\draw (6,0) node[above,font=\tiny] {$\vec{\mathbf{1}} $};
+
+\draw[thick,red,->] (0,0) -- (4,0);
+\draw (4,0) node[below,font=\footnotesize] {$\bar{x}\bvec{1}$};
+
+\draw[thick,->] (0,0) -- (4,3);
+\draw (4,3) node[above] {$\vec{\mathbf{x}}$};
+
+\draw[thick,dashed,blue,->] (4,0) -- (4,3);
+\draw (4,2) node[below right,font=\footnotesize] {$\bvec{x} - \bar{x}\bvec{1}$};
+
+\end{tikzpicture}
+\end{center}
+
+This picture looks familiar!  Where did we see it before?
+
+\end{frame}
+%===========================================================
+
+% %===========================================================
+% \begin{frame}
+%   \frametitle{Proof: The mean is least-squares optimal, part II}
+
+% \begin{itemize}
+% \item Recall that:
+% \begin{eqnarray}
+% P_{\vec{\mathbf{1}}}(\vec{\mathbf{x}}) & = & \vec{\mathbf{1}}\bar{x} \ \mbox{for some}\ \bar{x} \\
+% %
+% (\vec{\mathbf{x}} - P_{\vec{\mathbf{1}}}(\vec{\mathbf{x}})) \cdot \vec{\mathbf{1}} & = & 0
+% \end{eqnarray}
+
+% \item Substituting (1) into (2):
+% \begin{eqnarray}
+% (\vec{\mathbf{x}} - \vec{\mathbf{1}}\bar{x}) \cdot \vec{\mathbf{1}} & = & 0 \\
+% %
+% \vec{\mathbf{x}} \cdot \vec{\mathbf{1}} & = & \bar{x} (\vec{\mathbf{1}} \cdot \vec{\mathbf{1}})
+% \end{eqnarray}
+
+% \item Expanding (4):
+% \begin{eqnarray}
+% x_1 + x_2 + \cdots + x_n & = & n \bar{x} \\
+% %
+% \sum x_i & = & n \bar{x} \\
+% %
+% \bar{x} & = & (1/n) \sum x_i
+% \end{eqnarray}
+
+% \end{itemize}
+
+
+% \end{frame}
+% %===========================================================
+
+
+
+
+%===========================================================
+\begin{frame}
+  \frametitle{Sketch of Proof: Deriving the mean in vector geometric terms, part II}
+
+\begin{itemize}
+
+\item The mean can be interpreted in terms of the projection of $\bvec{x}$ onto the 1-vector:
+
+\end{itemize}
+
+\smallskip
+
+\begin{center}
+  \begin{tikzpicture}[x=0.5cm, y=0.5cm]
+  
+  \draw[thick,->] (0,0) -- (6,0);
+  \draw (6,0) node[above,font=\tiny] {$\vec{\mathbf{1}} $};
+  
+  \draw[thick,red,->] (0,0) -- (4,0);
+  \draw (4,0) node[below,font=\footnotesize] {$P_{\bvec{\mathbf{1}}}(\bvec{\mathbf{x}}) = \bar{x}\bvec{1}$};
+  
+  \draw[thick,->] (0,0) -- (4,3);
+  \draw (4,3) node[above] {$\vec{\mathbf{x}}$};
+  
+  \draw[thick,dashed,blue,->] (4,0) -- (4,3);
+  \draw (4,2) node[below right,font=\footnotesize] {$\bvec{x} - \bar{x}\bvec{1}$};
+  
+  \end{tikzpicture}
+  \end{center}
+
+  \begin{eqnarray*}
+    P_{\bvec{1}}(\bvec{x}) &=& \left(\frac{\bvec{1} \cdot \bvec{x}}{\bvec{1}\cdot\bvec{1}}\right)\bvec{1} \\
+                         &=& \bar{x}\bvec{1} \\
+                         &=& [\bar{x}, \bar{x}, \ldots, \bar{x}]'   
+    \end{eqnarray*}
+    
+
+
+\end{frame}
+%===========================================================
+
+%===========================================================
+\begin{frame}
+  \frametitle{Vector and Algebraic Formulas for the Mean}
+
+
+Vector formula for the mean:
+
+  \begin{eqnarray*}
+   \bar{x} &=& \frac{\bvec{1} \cdot \bvec{x}}{\bvec{1} \cdot \bvec{1}} \\
+          %  &=& \frac{\bvec{1} \cdot \bvec{x}}{|\bvec{1}|^2}
+  \end{eqnarray*}
+
+  \medskip
+
+Algebraic formula for the mean of $\bvec{x}$:
+
+\begin{equation*}
+ \bar{x} = \frac{x_1 + x_2 + \cdots + x_n}{n} = \frac{1}{n}\sum_{i=1}^{n} x_i
+\end{equation*}
+
+\medskip
+
+
+
+
+\end{frame}
+%===========================================================
+
+
+
+% %===========================================================
+% \begin{frame}
+%   \frametitle{Geometry of the Mean in Subject Space II}
+
+% Geometric derivation of the sample mean:
+
+% \begin{center}
+% \begin{tikzpicture}[x=0.5cm, y=0.5cm]
+
+% \draw[thick,->] (0,0) -- (6,0);
+% \draw (6,0) node[above,font=\tiny] {$\bvec{\mathbf{1}} $};
+
+% \draw[thick,red,->] (0,0) -- (4,0);
+% \draw (4,0) node[below,font=\footnotesize] {$P_{\bvec{\mathbf{1}}}(\bvec{\mathbf{x}}) = [\bar{x}, \bar{x},\ldots,\bar{x}]$};
+
+% \draw[thick,->] (0,0) -- (4,3);
+% \draw (4,3) node[above] {$\bvec{\mathbf{x}}$};
+
+% \draw[dashed,blue,->] (4,0) -- (4,3);
+% \draw (4,3) node[below right,font=\footnotesize] {$\bvec{e} = \bvec{\mathbf{x}} - P_{\bvec{\mathbf{1}}}(\bvec{\mathbf{x}}) = [x_1-\bar{x}, x_2 - \bar{x},\ldots,x_n - \bar{x}]$};
+
+% \end{tikzpicture}
+% \end{center}
+
+
+% \end{frame}
+% %===========================================================
+
+%===========================================================
+\begin{frame}
+\frametitle{Variable Space Geometry of Sample Variance}
+
+Sample variance is proportional to the sum of squared deviates about the mean:
+
+\[
+S_x^2 = \frac{1}{(n-1)} \sum (x_i - \bar{x})^2
+\]
+
+\medskip
+
+
+
+\begin{center}
+\begin{tikzpicture}[x=0.5cm, y=0.5cm]
+
+\draw[thick,-] (0,0) -- (10,0);
+\draw (10,0) node[right] {$\mathbf{x}$};
+
+\draw plot[only marks, mark=ball] coordinates { (1,0) (4,0) (2,0) (7,0) (3,0) (9,0) (3.5,0) (9.5,0) (8,0) (4.5,0) };
+
+
+\draw[thick,red,->] (5.15,-2) -- (5.15,0);
+\draw (5.15,-2) node[below] {$\bar{x}$};
+
+%\draw[thick,blue,-] (1,1) -- (5.15,1);
+\draw (1,1) edge [color = blue,|-|] node[above] {$x_i - \bar{x}$}  (5.15,1);
+%\draw (3,1.25) node[above] {$x_i - \bar{x}$};
+
+
+\end{tikzpicture}
+\end{center}
+
+
+
+\end{frame}
+%===========================================================
+
+
+
+%===========================================================
+\begin{frame}[shrink]
+  \frametitle{Vector Geometry of Sample Variance}
+
+\begin{itemize}
+
+\item Let $\bvec{e_x} = \bvec{x} - \bar{x}\bvec{1}$
+
+
+\medskip
+
+\begin{center}
+
+  \begin{tikzpicture}[x=0.5cm, y=0.5cm]
+  
+    \draw[thick,->] (0,0) -- (6,0);
+    \draw (6,0) node[above,font=\tiny] {$\vec{\mathbf{1}} $};
+    
+    \draw[thick,red,->] (0,0) -- (4,0);
+    \draw (4,0) node[below,font=\footnotesize] {$\bar{x}\bvec{1}$};
+    
+    \draw[thick,->] (0,0) -- (4,3);
+    \draw (4,3) node[above] {$\vec{\mathbf{x}}$};
+    
+    \draw[thick,dashed,blue,->] (4,0) -- (4,3);
+    \draw (4,2) node[below right,font=\footnotesize] {$\bvec{e} = \bvec{x} - \bar{x}\bvec{1}$};
+    
+    \end{tikzpicture}  
+
+  \end{center}
+
+\end{itemize}
+
+\medskip
+
+The sample variance can be expressed in terms of dots products of $\bvec{e_x}$ with itself:
+
+\begin{equation*}
+    S_{x}^2 = \frac{\bvec{e}_x \cdot \bvec{e}_x}{n-1} = \frac{|\bvec{e}_x|^2}{n-1}
+\end{equation*}
+
+
+
+
+\end{frame}
+%===========================================================
+
+%===========================================================
+\begin{frame}
+  \frametitle{Mean centering}
+
+In the previous slide, we considered the vector: 
+
+\[
+\bvec{e_x} = \bvec{x} - \bar{x}\bvec{1}
+\]
+
+\smallskip
+
+We can think of $\bvec{e}_x$ as a ``mean centered'' version of $\bvec{x}$ , i.e. it's the vector we get when we subtract the mean of $\bvec{x}$, $\bar{x}$, from every element of $\bvec{x}$.
+
+\medskip
+
+Important relationships for mean-centered vectors:
+
+\begin{itemize}
+  \item The variance of $X$ is proportional to  $|\bvec{e}_x|^2$  
+  \item The standard deviation of $X$ is proportional to  $|\bvec{e}_x|$
+\end{itemize}
+
+\medskip
+
+{\small
+For convenience, I will sometimes state the variables of interest are mean centered and use the notation $\bvec{x}$ instead of $\bvec{e}_x$ so as to avoid a proliferation of subscripts.
+}
+
+
+\end{frame}
+%===========================================================
+
+
+
+%===========================================================
+\begin{frame}
+  \frametitle{Covariance and correlation in vector geometric terms}
+
+Let $X$ and $Y$ be variables of interest, and let $\bvec{x}$ and $\bvec{y}$ be their corresponding mean centered vector representations.
+
+\begin{center}
+
+\begin{tikzpicture}[x=0.5cm, y=0.5cm]
+
+\draw[thick,->] (0,0) -- (3,2);
+\draw (3,2) node[right] {$\bvec{x}$};
+
+\draw[thick,->] (0,0) -- (5,-1);
+\draw (5,-1) node[above] {$\bvec{y}$};
+
+\draw (0,0) +(-11:0.5cm) arc (-11:34:0.5cm);
+\path (0,0) ++(10:0.7cm) node[font=\footnotesize] {$\theta$};
+
+\end{tikzpicture}
+\end{center}
+
+Vector formulas for covariance and correlation:
+\begin{eqnarray*}
+\text{Covariance: } \cov(X,Y) &=&  \frac{\bvec{x} \cdot \bvec{y}}{n-1}\\
+\text{Correlation: } \corr(X,Y) &=&  \frac{\bvec{x} \cdot \bvec{y}}{|\bvec{x}||\bvec{y}|} = \cos \theta
+\end{eqnarray*}
+
+\begin{alertblock}{Geometric interpretation of correlation}
+    The correlation between two variables $X$ and $Y$ is equivalent to the cosine of the angle between their mean-centered vector representations!
+\end{alertblock}
+    
+
+\end{frame}
+%===========================================================
+
+
+
+
+\end{document}

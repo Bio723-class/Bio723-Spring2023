@@ -1,0 +1,113 @@
+%\useoutertheme[glossy]{wuerzburg}
+\useinnertheme[shadow,outline]{chamfered}
+%\usecolortheme{shark}
+\usecolortheme{beaver}
+\beamertemplatenavigationsymbolsempty
+
+
+\usepackage{fontspec}      % support opentype text fonts
+\usepackage{amsmath}
+\usepackage[mathrm=sym,mathbf=sym]{unicode-math}
+                           % support opentype math fonts, including bold
+
+% Slightly reduce font size.
+\defaultfontfeatures{Scale=.85}
+%
+% The explicit .otf extension tells the engines to find the font via
+% filenames in the TeX trees, rather than as system-installed fonts.
+%
+\setmainfont[% main rm
+  Ligatures=TeX,
+      ItalicFont=LucidaBrightOT-Italic.otf,
+        BoldFont=LucidaBrightOT-Demi.otf,
+  BoldItalicFont=LucidaBrightOT-DemiItalic.otf,
+  ]{LucidaBrightOT.otf}
+%
+\setsansfont[% main sans
+  Ligatures=TeX,
+      ItalicFont=LucidaSansOT-Italic.otf,
+        BoldFont=LucidaSansOT-Demi.otf,
+  BoldItalicFont=LucidaSansOT-DemiItalic.otf,
+  ]{LucidaSansOT.otf}
+%
+\setmonofont[% main typewriter
+      ItalicFont=LucidaSansTypewriterOT-Oblique.otf,
+        BoldFont=LucidaSansTypewriterOT-Bold.otf,
+  BoldItalicFont=LucidaSansTypewriterOT-BoldOblique.otf,
+  ]{LucidaSansTypewriterOT.otf}
+%
+
+\setmathfont{LucidaBrightMathOT.otf}[BoldFont=LucidaBrightMathOT-Demi]
+%
+% The specialized one-off fonts:
+\newfontface\LucidaBlackletter{LucidaBlackletterOT.otf}
+\newfontface\LucidaCalligraphy{LucidaCalligraphyOT.otf}
+\newfontface\LucidaHandwriting{LucidaHandwritingOT.otf}
+%
+% GrandeMono and Console fonts for an example:
+\newfontface\LucidaGrandeMono{LucidaGrandeMonoDK.otf}
+\newfontface\LucidaConsole{LucidaConsoleDK.otf}
+
+\usepackage{fancyvrb}
+
+%% Fancy syntax coloring via pygments
+%\usepackage{minted}
+%\definecolor{bg}{rgb}{0.95,0.95,0.95}
+%\usemintedstyle{borland}
+
+
+% \newenvironment{Rcode}
+% {\VerbatimEnvironment
+%  \begin{minted}[fontsize=\scriptsize,baselinestretch=1]{r}}%
+% {\end{minted}}
+
+% \newenvironment{Pcode}
+% {\VerbatimEnvironment
+% \begin{minted}[fontsize=\scriptsize,baselinestretch=1]{python}}%
+% {\end{minted}}
+
+% \newenvironment{Code}[1]
+% {\VerbatimEnvironment
+ % \begin{minted}[fontsize=\scriptsize,baselinestretch=1]{#1}}%
+% {\end{minted}}
+
+
+\usepackage{textfit} % commands \scaletoheight{height}{text} and \scaletowidth{width}{text}
+
+\usepackage{tikz}
+
+\usepackage{tcolorbox}
+
+\usepackage{subcaption}
+
+\newtheorem{Alert}{Alert}
+\newtheorem{Highlight}{Highlight}
+
+\newcommand{\Species}[1]{{\rmfamily \itshape #1}}
+\newcommand{\Real}{\ensuremath{\mathbb{R}}}
+\newcommand{\RealN}{\ensuremath{\mathbb{R}^n}}
+\newcommand{\RealP}{\ensuremath{\mathbb{R}^p}}
+\newcommand{\Mtx}[1]{\ensuremath{\bm{#1}}}
+\newcommand{\Inv}[1]{\ensuremath{#1^{-1}}}
+\newcommand{\InvMtx}[1]{\ensuremath{\bm{#1}^{-1}}}
+\newcommand{\Red}[1]{\textcolor{red}{#1}}
+\newcommand{\PsInv}[1]{\ensuremath{\bm{#1}^{+}}}
+\DeclareMathOperator{\cov}{cov}
+\DeclareMathOperator{\corr}{corr}
+
+\usepackage{booktabs}
+
+
+\usepackage{pifont}
+\newcommand{\weblink}{\ding{43}}  % hand with pointing finger
+
+\definecolor{links}{HTML}{2A1B81}
+\hypersetup{colorlinks,linkcolor=,urlcolor=magenta}
+
+
+
+
+% --- Override \vec with an invocation of \xvec.
+\let\stdvec\vec
+\newcommand{\bvec}[1]{\vec{\mathbf{#1}}}
+
