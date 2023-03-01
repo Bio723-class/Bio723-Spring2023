@@ -32,9 +32,9 @@ For each of the problem below (except in cases where you are asked to discuss yo
 
 1. For each of the data set listed below, do the following:
 
-    * [`pollen`](https://github.com/bio304-class/bio304-fall2017/raw/master/datasets/ABD-pollen-sterility.csv): Hybrid offspring from different species are often sterile. Moyle et al. (2004) studied hybrids in the plant species *Silene*, and quantified the proportion of pollen that is sterile as a function of genetic distance.  
+    * [`pollen`](https://raw.githubusercontent.com/Bio723-class/example-datasets/master/ABD-father-mutations.csv): Hybrid offspring from different species are often sterile. Moyle et al. (2004) studied hybrids in the plant species *Silene*, and quantified the proportion of pollen that is sterile as a function of genetic distance.  
 
-    * [`mutations`](https://github.com/bio304-class/bio304-fall2017/raw/master/datasets/ABD-father-mutations.csv): Fathers transmit more new mutations to their offspring that do mothers, due to the fact that copying errors occur during sperm production.  There is interst in how father's age affects the number of mutations.  Kong et al. (2012) use genome sequencing of 21 father-child pairs to quantify the number of new mutations inhereited from each father.  
+    * [`mutations`](https://raw.githubusercontent.com/Bio723-class/example-datasets/master/ABD-father-mutations.csv): Fathers transmit more new mutations to their offspring that do mothers, due to the fact that copying errors occur during sperm production.  There is interst in how father's age affects the number of mutations.  Kong et al. (2012) use genome sequencing of 21 father-child pairs to quantify the number of new mutations inhereited from each father.  
 
 
 
