@@ -1,0 +1,89 @@
+---
+title: "Bivariate Regression Images"
+author: "Paul M. Magwene"
+
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+library(tidyverse)
+library(broom)
+library(ggpmisc)
+```
+
+
+
+```{r}
+set.seed(20160921)
+
+npts <- 50
+X <- seq(1, 5, length.out = npts) + rnorm(npts)
+a <- 1.0
+b <- 1.5
+Y <- b*X + a + rnorm(npts, sd = 2)  
+
+df.xy <- data.frame(X = X, Y = Y)
+
+```
+
+```{r}
+p <-
+  ggplot(df.xy, aes(x = X, y = Y)) + 
+  geom_point()
+
+p
+```
+
+
+```{r}
+fit.xy <- lm(Y ~ X, data = df.xy)
+df.xy.augmented <- augment(fit.xy, df.xy)
+```
+
+```{r}
+p.fit <- 
+  ggplot(df.xy.augmented, aes(X, Y)) + 
+  geom_point(size=3) + 
+  geom_smooth(method="lm", color="red", se = FALSE, size=1.5) +
+  geom_segment(aes(xend = X, yend = .fitted), linetype="dashed") +
+  theme_classic()
+
+p.fit
+```
+
+```{r}
+ggsave("bivariate-regression-image.pdf", p.fit)
+
+```
+
+
+```{r}
+df.xy.ctr <- scale(df.xy, center = TRUE, scale = FALSE) |> as_tibble()
+fit.xy.ctr <- lm(Y ~ X, data = df.xy.ctr)
+df.xy.ctr.augmented <- augment(fit.xy.ctr, df.xy.ctr)
+```
+
+```{r}
+p.fit.ctr <- 
+  ggplot(df.xy.ctr.augmented, aes(X, Y)) + 
+  geom_point(size=3) + 
+  geom_smooth(method="lm", color="red", se = FALSE, size=1.5) +
+  geom_segment(aes(xend = X, yend = .fitted), linetype="dashed") +
+  geom_quadrant_lines(linetype = "solid") +
+  scale_x_continuous(limits = symmetric_limits) +
+  scale_y_continuous(limits = symmetric_limits) +  
+  theme_minimal() +
+  theme(panel.grid = element_blank())
+
+p.fit.ctr
+```
+
+```{r}
+ggsave("bivariate-regression-ctr-image.pdf", p.fit.ctr)
+
+```
