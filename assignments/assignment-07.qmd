@@ -1,0 +1,32 @@
+---
+title: "Bio 723, Assignment 07"
+author: "Your Name and NetID here!"
+format: 
+  html:
+    embed-resources: true
+    fig_caption: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, prompt = FALSE, eval = FALSE, 
+                      warning = TRUE, comment=NA, cache = FALSE,
+                      fig.width = 6, fig.height = 4)
+```
+
+# Make your solutions computable
+
+For each of the problem below (except in cases where you are asked to discuss your interpretaion) write R code blocks that will **compute appropriate solutions**. A good rule of thumb for judging whether your solution is appropriately "computable" is to ask yourself "If I added additional observations to this data set, would my code still compute the right solution?"
+
+# Problems
+
+1.  Do a PCA analysis on the iris data set with all three species pooled together. Generate a plot showing the projection of the specimens on the first two PC axes as shown below. Represent the specimens from a given species with different colors and shapes \[4 pts\]
+
+    ![](figures/fig-iris-pca.png)
+
+2.  What fraction of the variance in the data is captured by PC1? What fraction of the variation is captured by PC2? 
+
+3.  Create a biplot, simultaneously depicting the samples and variables in the space of PCs 1 and 2, by ending the plot you created in problem 1 to include a vector depiction of the PC loadings.
+
+4.  Calculate the factor loadings the iris PCA. Which of the original variable(s) contribute most to PC1? Which of the original variable(s) contribute most to PC2?
+
+5.  Carry out PCA of the iris data set again, using the correlation matrix rather than covariance matrix. Based on this new PCA, generate a new biplot like the one you created in Problem 4 and recalculate the factor loadings. Does your perception of the relative contribution of the original variables to the PCs change when you carry out PCA on the correlation matrix? If so, how?
