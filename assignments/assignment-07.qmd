@@ -29,4 +29,4 @@ For each of the problem below (except in cases where you are asked to discuss yo
 
 4.  Calculate the factor loadings the iris PCA. Which of the original variable(s) contribute most to PC1? Which of the original variable(s) contribute most to PC2?
 
-5.  Carry out PCA of the iris data set again, using the correlation matrix rather than covariance matrix. Based on this new PCA, generate a new biplot like the one you created in Problem 4 and recalculate the factor loadings. Does your perception of the relative contribution of the original variables to the PCs change when you carry out PCA on the correlation matrix? If so, how?
+5.  Carry out PCA of the iris data set again, using the correlation matrix rather than covariance matrix. Based on this new PCA, generate a new biplot like the one you created in Problem 3 and recalculate the factor loadings. Does your perception of the relative contribution of the original variables to the PCs change when you carry out PCA on the correlation matrix? If so, how?
