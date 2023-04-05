@@ -70,6 +70,31 @@ ggsave("cva-motivating-PCA.pdf")
 ```
 
 ```{r}
+G.lda <- lda(group ~ ., data = G)
+G.lda$scaling
+
+
+
+rot.DF <- as_tibble(G.lda$scaling)
+
+cva1.xend <- rot.DF[[1,1]] 
+cva1.yend <- rot.DF[[2,1]] 
+
+
+
+
+p1 + 
+  geom_segment(x = -cva1.xend, y = -cva1.yend, 
+               xend = cva1.xend, yend = cva1.yend,
+               color="black") 
+
+
+
+ggsave("cva-motivating-CVA.pdf")
+```
+
+
+```{r}
 ggplot(G.scores, aes(x = PC1, y = PC2)) +
   geom_point() +
   coord_fixed()
