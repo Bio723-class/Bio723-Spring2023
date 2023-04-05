@@ -26,13 +26,57 @@ G2 <- tibble(X = g2[,1], Y = g2[,2], group="Group 2")
 G <- bind_rows(G1,G2)
 
 
-ggplot(G, aes(x = X, y = Y, color=group)) + 
-  geom_point() +
+p1 <-
+  ggplot(G, aes(x = X, y = Y, color=group)) + 
+  geom_point(alpha=0.5) +
   coord_fixed() + 
   xlim(-4.5,4.5) + 
   ylim(-4.5,4.5) +
   theme(legend.position="none")
 
-ggsave()
+p1
+ggsave("cva-motivating-example.pdf")
 
 ```
+
+
+
+```{r}
+G.pca <- prcomp(select(G, -group))
+G.scores <- as_tibble(G.pca$x)
+
+rot.DF <- as_tibble(G.pca$rotation)
+
+pc1.xend <- rot.DF[[1,1]] * 2 * G.pca$sdev[1]
+pc1.yend <- rot.DF[[2,1]] * 2 * G.pca$sdev[1]
+
+pc2.xend <- rot.DF[[1,2]] * 2 * G.pca$sdev[2]
+pc2.yend <- rot.DF[[2,2]] * 2 * G.pca$sdev[2]
+
+
+
+
+p1 + 
+  geom_segment(x = -pc1.xend, y = -pc1.yend, 
+               xend = pc1.xend, yend = pc1.yend,
+               color="black") 
+  # geom_segment(x = -pc2.xend, y = -pc2.yend, 
+  #              xend = pc2.xend, yend = pc2.yend,
+  #              color="black") 
+
+
+ggsave("cva-motivating-PCA.pdf")
+
+```
+
+```{r}
+ggplot(G.scores, aes(x = PC1, y = PC2)) +
+  geom_point() +
+  coord_fixed()
+```
+
+```{r}
+
+```
+
+

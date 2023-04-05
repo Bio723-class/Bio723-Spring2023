@@ -1,0 +1,44 @@
+---
+title: "Bio 723: Assignment 08"
+output:
+  html_document:
+    highlight: default
+    theme: readable
+    fig_caption: true
+    toc: yes
+    toc_depth: 4
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, prompt = FALSE, eval = FALSE, 
+                      warning = TRUE, comment=NA, cache = FALSE,
+                      fig.width = 6, fig.height = 4)
+```
+
+# Make your solutions computable
+
+For each of the problem below (except in cases where you are asked to discuss your interpretaion) write R code blocks that will **compute appropriate solutions**. A good rule of thumb for judging whether your solution is appropriately "computable" is to ask yourself "If I added additional observations to this data set, would my code still compute the right solution?"
+
+
+
+# Problems
+
+The UC Irvine Machine Learning Repository has a dadta set called "wine", which contains information on 13 chemical traits measured on samples of wine representing three different cultivars.  Information about this data set is available at: https://archive.ics.uci.edu/ml/datasets/wine.
+
+The raw data is available as a CSV file: [wine.csv](https://archive.ics.uci.edu/ml/machine-learning-databases/wine/wine.data).  The first column of this data is an attribute (1,2,3) giving the cultivar classification; the classifications are given as integers but you'll have to treat this as a categorical variable.  The other columns represent the chemical traits described at the data set home page (see above).  Note that there are no column names in the data set, so when you read the data in using `read_csv()` or a similar function you'll have to account for this.
+
+1.  Create a data frame from the wine data, and assign meaningful column names using the attribute information at https://archive.ics.uci.edu/ml/datasets/wine.
+
+1. Since the attributes of the data are measured on different scales it makes sense to center and scale the data, so that we will carry out our multivariate calculations on the correlations.  Generate a derived data frame with the centered and scaled chemical attributes. 
+
+1. Using the centered-and-scaled attributes, carry out PCA of the wine data set. Generate a plots of the observations in the space of the first two PC axes. How much of the variation in the data is captured by PCs 1 and 2?  
+
+1. Using the centered-and-scaled attributes, carry out CVA of the wine data set using the `MASS::lda()` function. How much of the between-group variance is captured by the respective canonical variates? 
+
+1. Generate a basic CVA plot for the wine data set 
+
+1. Generate a CVA plot illustrating the 95% confidence regions for the group means 
+
+1. Generate another CVA plot illustrating the 95% tolerance regions for the group population distributions
+
+1. Comment on the similarities and differences between the PCA plot and CVA plot of the wine data 
