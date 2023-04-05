@@ -1,12 +1,10 @@
 ---
 title: "Bio 723: Assignment 08"
-output:
-  html_document:
-    highlight: default
-    theme: readable
+author: "Your Name and NetID here!"
+format: 
+  html:
+    embed-resources: true
     fig_caption: true
-    toc: yes
-    toc_depth: 4
 ---
 
 ```{r setup, include=FALSE}
