@@ -1,0 +1,38 @@
+---
+title: "CVA examples"
+format: html
+editor: visual
+---
+
+## 
+
+## Motivating example
+
+```{r}
+library(MASS)
+library(tidyverse)
+```
+
+```{r}
+cov.mtx <- matrix(c(1,0.8,
+                 0.8, 1), nrow = 2, ncol = 2)
+
+g1 <- mvrnorm(200, c(0,-1.25), Sigma=cov.mtx)
+g2 <- mvrnorm(200, c(0,1.25), Sigma=cov.mtx)
+
+G1 <- tibble(X = g1[,1], Y = g1[,2], group="Group 1")
+G2 <- tibble(X = g2[,1], Y = g2[,2], group="Group 2")
+
+G <- bind_rows(G1,G2)
+
+
+ggplot(G, aes(x = X, y = Y, color=group)) + 
+  geom_point() +
+  coord_fixed() + 
+  xlim(-4.5,4.5) + 
+  ylim(-4.5,4.5) +
+  theme(legend.position="none")
+
+ggsave()
+
+```
