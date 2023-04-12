@@ -1,0 +1,47 @@
+---
+title: "Bio 723: Assignment -- LOESS and Logistic Regression"
+format: 
+  html:
+    embed-resources: true
+    fig_caption: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, prompt = FALSE, eval = TRUE, 
+                      warning = TRUE, comment=NA, cache = FALSE,
+                      fig.width = 6, fig.height = 4)
+```
+
+
+
+## Make your solutions computable
+
+For each of the problems below (except in cases where you are asked to discuss your interpretaion) write R code blocks that will **compute appropriate solutions**. A good rule of thumb for judging whether your solution is appropriately "computable" is to ask yourself "If I added or changed observations to this data set, would my code still compute the right solution?"
+
+When completed, submit your R Markdown document (the file with the extension `.Rmd`) and the knit HTML via Sakai.
+
+## Problems
+
+#### LOESS regression
+
+1. Using the [Obama approval poll data](https://github.com/Bio723-class/example-datasets/raw/master/obama-polls-2008-2011.txt) discussed in the workbook, generate a plot that **simultaneously** illustrates trends in both approval and disapproval ratings for Barack Obama, showing both the raw data and corresponding LOESS fits. Use colors and/or shapes to distinguish the two trends. Make sure both your x- and y-axes are scaled to show the full range of the data. Label your axes and create a title in the plot. Aim for a "publication quality" figure [3 pts]
+
+\ 
+
+#### Logistic regression
+
+Bumpus (1898) described a sample of house sparrows which he collected after a very severe storm. The sample included 136 birds, sixty four of which perished during the storm. Also included in his description were a variety of morphological measurements on the birds and information about their sex and age (for male birds). This data set has become a benchmark in the evolutionary biology literature for demonstrating methods for analyzing natural selection. The Bumpus data set is available from the class website as a tab-delimited file [bumpus-data.txt](https://github.com/bio304-class/bio304-course-notes/raw/master/datasets/bumpus-data.txt). 
+
+Reference: Bumpus, H. C. 1898. The elimination of the unfit as illustrated by the introduced sparrow, Passer domesticus. (A fourth contribution to the study of variation.) *Biol. Lectures: Woods Hole Marine Biological Laboratory*, 209--225.
+
+
+2. Measures like weight and skeletal dimensions are often proxies for body size. Fit logistic regression models for: a) survival as a function of weight; and b) survival as a function of skull width and report the coefficients of the models. 
+
+1. Illustrate the two regression models from the previous question using scatter plots overlain with logistic regression curves.  Combine the two plots as subplots A) and B) in a single figure, using `cowplot`. 
+
+1. Use `dplyr::group_by` and `dplyr::do()` to fit  logistic regressions of survival as a function of weight for male and female birds separately, using `broom::tidy` to return a table of coefficients (and other parameters) from the model fits.
+
+1. Using faceting to produce a figure illustrating the logistic regression of survival as a function of weight for male and female birds separately. 
+
+
+
